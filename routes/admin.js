@@ -1,10 +1,63 @@
 var express = require('express');
 var router = express.Router();
+const {adminLoginpage,adminHome,loginAdmin,signOut,dashboard,adminAlluser,productTable,addproduct,addProductSubmit,removeProduct,editProduct,editProductSubmit,adminBlockUser,adminUnBlockUser,categorypage,addcategory,addCategorySubmit}=require('../controler/admincontroller')
 
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
-});
+const{sessionCheck,loginRedirect,nocache}=require('../middlwares/admin-middlwares')
+
+const multer = require('multer');
+const storage = multer.diskStorage({
+  
+    destination: function (req, file, cb) {
+      cb(null, './public/product-pictures')
+    },
+    filename: function (req, files, cb) {
+      cb(null, Date.now() + '-' + files.originalname)
+    }
+  })
+const upload = multer({ storage: storage });
+
+
+router.get('/', nocache , loginRedirect,adminLoginpage)
+
+router.get('/adminhome',adminHome),
+
+router.post('/adminlogin',loginAdmin),
+
+router.get('/dashboard',dashboard),
+
+router.get('/signout',signOut)
+
+router.get('/alluser',adminAlluser);
+
+router.get('/productTable',productTable)
+
+router.get('/add-product',addproduct)
+
+router.post('/edit-product',editProduct)
+
+
+
+router.post('/addProductSubmit', upload.fields( [
+   { name : 'productImage1' , maxCount : 1 } ,
+ { name : 'productImage2' , maxCount : 1 } , 
+ { name : 'productImage3' , maxCount : 1 } ] ) ,
+ addProductSubmit);
+
+ router.get('/delete-product/:id',removeProduct)
+
+ router.post('/edit-product/:id',editProductSubmit)
+
+ router.get('/blockUser', adminBlockUser)
+
+ router.get('/unBlockUser',  adminUnBlockUser)
+
+//  router.get('/category',categoryManagement)
+
+router.get('/allcategory',categorypage);
+
+router.get('/add-category',addcategory);
+
+router.post('/addCategorySubmit',addCategorySubmit)
 
 
 

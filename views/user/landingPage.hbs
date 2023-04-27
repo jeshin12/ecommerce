@@ -1,0 +1,141 @@
+<!-- start banner Area -->
+<section class="banner-area">
+	<div class="container">
+		<div class="row fullscreen align-items-center justify-content-start">
+			<div class="col-lg-12">
+				<div class="active-banner-slider owl-carousel">
+					<!-- single-slide -->
+					<div class="row single-slide align-items-center d-flex">
+						<div class="col-lg-5 col-md-6">
+							<div class="banner-content">
+								<h1>New shoes<br>Collection!</h1>
+								<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
+									incididunt ut labore et
+									dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.</p>
+								<div class="add-bag d-flex align-items-center">
+									<a class="add-btn" href=""><span class="lnr lnr-cross"></span></a>
+									<span class="add-text text-uppercase">Add to Bag</span>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-7">
+							<div class="banner-img">
+								<img class="img-fluid" src="img/banner/banner-img.png" alt="">
+							</div>
+						</div>
+					</div>
+					<!-- single-slide -->
+					<div class="row single-slide">
+						<div class="col-lg-5">
+							<div class="banner-content">
+								<h1> New shoes<br>Collection!</h1>
+								<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
+									incididunt ut labore et
+									dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.</p>
+								<div class="add-bag d-flex align-items-center">
+									<a class="add-btn" href=""><span class="lnr lnr-cross"></span></a>
+									<span class="add-text text-uppercase">Add to Bag</span>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-7">
+							<div class="banner-img">
+								<img class="img-fluid" src=""
+									C:\Users\JESHIN\Downloads\structural-geometrical-app-cover-template\4949813.jpg""
+									alt="">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<!-- End banner Area -->
+
+
+
+<!-- start product Area -->
+<section class="">
+	<!-- single product slide -->
+	<div class="single-product-slider">
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-lg-6 text-center">
+					<div class="section-title">
+						<h1>SEASON'S BEST</h1>
+
+					</div>
+				</div>
+			</div>
+
+
+			
+
+
+
+
+									
+			<div class="row">
+				<!-- single product -->
+				{{#each product}}
+				<div class="col-lg-3 col-md-6">
+
+					<div class="single-product">
+
+						<a href="/product-detail?id={{this._id}}"><img class="img-fluid" src="/product-pictures/{{this.img1}}" alt=""></a>
+						<div class="product-details">
+							<h3 style="color: #ff6f00;">{{this.name}}</h3>
+							<h6>{{this.description}}</h6>
+							<h5>size:{{this.size}}</h5>
+							<h5>color:{{this.color}}</h5>
+
+
+							<div class="price">
+
+								<h6>₹{{this.price}}</h6>
+								
+							</div>
+
+
+
+
+							<div class="prd-bottom">
+
+								<a href="" class="social-info">
+									<span class="ti-bag"></span>
+									<p class="hover-text">add to bag</p>
+								</a>
+								<a href="" class="social-info">
+									<span class="lnr lnr-heart"></span>
+									<p class="hover-text">Wishlist</p>
+								</a>
+								<a href="" class="social-info">
+									<span class="lnr lnr-sync"></span>
+									<p class="hover-text">compare</p>
+								</a>
+								{{!-- <a href="" class="social-info">
+									<span class="lnr lnr-move"></span>
+									<p class="hover-text">view more</p>
+								</a> --}}
+								<a href="" class="social-info">
+									<form action="/click" method="post">
+										<input type="text" name="id" value="{{this._id}}" hidden>
+										<span class="lnr lnr-move"></span>
+										<button type="submit" class="hover-text"
+											style="border: none; background:transparent ">View more</button>
+									</form>
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+				{{/each}}
+
+
+			</div>
+		</div>
+	</div>
+	<!-- single product slide -->
+
+</section>

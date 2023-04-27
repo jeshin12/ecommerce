@@ -1,11 +1,36 @@
 var express = require('express');
 var router = express.Router();
-const userController = require('../controler/usercontroller')
+const { homePage,loginPage,signupPage,signupSubmit,loginSubmit,userlogout,clickProduct,shopbyCategory,userprofile,productDetail} = require('../controler/usercontroller')
+const{sessionCheck,nocache}=require('../middlwares/user-middlwares')
 /* GET home page. */
 
-userController.homePage
 
-router.get('/',homePage)
+router.get('/', sessionCheck,homePage)
+
+router.get('/login',nocache, loginPage);
+
+router.get('/signup', nocache,signupPage);
+
+router.post('/signupSubmit',nocache,signupSubmit);
+
+router.post('/loginSubmit',nocache,loginSubmit);
+
+router.get('/logout', userlogout);
+
+router.post('/click',sessionCheck,clickProduct)
+
+router.get('/shop-by-category/:name',sessionCheck,shopbyCategory)
+
+router.get('/userprofile',sessionCheck,userprofile)
+
+router.get('/product-detail' ,sessionCheck, productDetail)
+
+
+
+
+
+
+
 
 
 
