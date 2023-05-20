@@ -1,19 +1,26 @@
 var createError = require('http-errors');
 var express = require('express');
+
 var path = require('path');
 var cookieParser = require('cookie-parser');
+const bodyParser= require("body-parser")
+
 var logger = require('morgan');
 var hbs = require('express-handlebars');
 var multer=require('multer')
 var userRouter = require('./routes/user');
 var adminRouter = require('./routes/admin');
+var flash=require('connect-flash')
 var session= require('express-session')
 var app = express();
 const upload=multer({dest:'uploads/'})
 var db = require('./dbconfig/connection');
+require("dotenv").config();
 // const multer = require('multer');
 
 // view engine setup
+
+
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 app.use(session({secret:"key",cookie:{maxAge:600000}}))
@@ -22,6 +29,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(session({
+  secret:"Key",
+  cookie:{maxAge:6000000}
+}));
+app.use(flash());
 
  
 db.connect((err) => {

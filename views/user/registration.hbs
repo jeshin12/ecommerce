@@ -1,18 +1,18 @@
 <!-- Start Banner Area -->
-	<section class="banner-area organic-breadcrumb">
-		<div class="container">
-			<div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
-				<div class="col-first">
-					<h1>Login/Register</h1>
-					<nav class="d-flex align-items-center">
-						<a href="index.html">Home<span class="lnr lnr-arrow-right"></span></a>
-						<a href="category.html">Login/Register</a>
-					</nav>
-				</div>
+<section class="banner-area organic-breadcrumb">
+	<div class="container">
+		<div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+			<div class="col-first">
+				<h1>Login/Register</h1>
+				<nav class="d-flex align-items-center">
+					<a href="index.html">Home<span class="lnr lnr-arrow-right"></span></a>
+					<a href="category.html">Login/Register</a>
+				</nav>
 			</div>
 		</div>
-	</section>
-	<!-- End Banner Area -->
+	</div>
+</section>
+<!-- End Banner Area -->
 <!--================Login Box Area =================-->
 
 <section class="login_box_area section_gap" style="padding-top:3%;">
@@ -91,7 +91,7 @@
 						let flag4;
 						form.addEventListener('submit', e => {
 							checkInputs();
-							if (flag1 == true && flag == true && flag2 == true && flag3 == true && flag4==true) {
+							if (flag1 == true && flag == true && flag2 == true && flag3 == true && flag4 == true) {
 								return true;
 							}
 							else {
@@ -105,7 +105,7 @@
 							const passwordValue = password.value.trim();
 							const password2Value = password2.value.trim();
 							const mobileValue = mobile.value.trim();
-							
+
 							if (usernameValue === '') {
 								setErrorFor(username, 'Username cannot be blank');
 								flag = false;
@@ -139,9 +139,12 @@
 							if (passwordValue === '') {
 								setErrorFor(password, 'Password cannot be blank');
 								flag3 = false;
+							} else if (!isPassword(passwordValue)) {
+								setErrorFor(password, 'Password must contain at least 1 digit and at least  7 characters long');
+								flag3 = false;
 							} else {
 								setSuccessFor(password);
-								flag3 = true
+								flag3 = true;
 							}
 							if (password2Value === '') {
 								setErrorFor(password2, 'Password cannot be blank');
@@ -172,6 +175,9 @@
 						}
 						function isName(username) {
 							return /^[a-z ,.'-]+$/.test(username);
+						}
+						function isPassword(password) {
+							 return /^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{8,}$/.test(password);
 						}
 					</script>
 

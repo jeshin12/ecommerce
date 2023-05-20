@@ -1,0 +1,108 @@
+<script src="/javascripts/js/vendor/jquery-2.2.4.min.js"></script>
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+<div class="container mt-5 mb-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-3 col-lg-4 col-md-12">
+                <div class="sidebar">
+                    <div class="product-widget">
+                        <h5 style="color: #ff6f00" class="widget-title mb-30">Product Price Filter</h5>
+                            <form action="/priceFilter" method="post">
+                                <label for="min-price">Min price:</label><br>
+                                <input type="number" id="min-price" min="0" value="0" name="minprice"><br>
+                                <label for="max-price">Max price:</label><br>
+                                <input type="number" id="max-price" min="0" value="100" name="maxprice"><br>
+                                <button style="color: #ff6f00" type="submit" class="btn btn-light mt-3" >Filter</button>
+                            </form>
+                            <br>
+                        <ul class="product-categories">
+
+                            
+                            <ul class="nav nav-tabs justify-content-center mb-55" id="myTab" role="tablist">
+                                {{#each getcategory}}
+                                <form method="POST" action="/filter-product">
+                                    <li class="nav-item" role="presentation">
+                                        <input type="hidden" name="name" value="{{this.name}}">
+                                        <button style="color: #ff6f00" class="btn btn-light" id="profile-tab"
+                                            type="submit" role="tab" aria-selected="true">{{this.name}}</button>
+                                    </li>
+                                </form>
+
+                                {{/each}}
+
+                            </ul>
+
+                        </ul>
+                    </div>
+                    <br>
+                </div>
+            </div>
+
+
+            <div class="row justify-content-center">
+                <div class="col-lg-6 text-center">
+                    <div class="section-title">
+                        <h1 style="color: #ff6f00;font-weight: bolder;">{{products.[0].categoryid}}</h1>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
+                            labore
+                            et
+                            dolore
+                            magna aliqua.</p>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <!-- single product -->
+                {{#each products}}
+                <div class="col-lg-3 col-md-6">
+                    <div class="single-product">
+                        {{!-- <img class="img-fluid" src="/product-pictures/{{this._id}}.jpg" alt=""> --}}
+                        <a href="/product-detail?id={{this._id}}"><img class="img-fluid"
+                                src="/product-pictures/{{this.img1}}" alt=""></a>
+                        <div class="product-details">
+                            <h6>{{this.name}}</h6>
+                            <h5>size:{{this.size}}</h5>
+                            <h5>color:{{this.color}}</h5>
+
+                            <div class="price">
+                                <h6>${{this.price}}.00</h6>
+                                <h6 class="l-through">$210.00</h6>
+                            </div>
+                            <div class="prd-bottom">
+
+                                <a href="/add-to-cart/{{this._id}}" class="social-info">
+                                    <span class="ti-bag"></span>
+                                    <p class="hover-text">add to bag</p>
+                                </a>
+
+                                {{!-- <a class="social-info" onclick="return addToCart('{{this._id}}')">
+                                    <span class="ti-bag"></span>
+                                    <p class="hover-text">add to bag</p>
+                                </a> --}}
+
+                                <a href="/add-to-wishlist/{{this._id}}" class="social-info">
+                                    {{#if this.isWishlisted}}<span class="fas fa-heart"
+                                        style="font-size:14px; color:#ff6f00;"></span>
+                                    {{else}} <span class="lnr lnr-heart"></span>
+                                    {{/if}}
+                                    <p class="hover-text">Wishlist</p>
+                                </a>
+                                <a href="" class="social-info">
+                                    <span class="lnr lnr-sync"></span>
+                                    <p class="hover-text">compare</p>
+                                </a>
+                                <a href="/productdetails/{{this._id}}" class="social-info">
+                                    <span class="lnr lnr-move"></span>
+                                    <p class="hover-text">view more</p>
+                                </a>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{/each}}
+            </div>
+        </div>

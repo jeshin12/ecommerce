@@ -1,6 +1,7 @@
 const collection = require("../dbconfig/collection");
 
 module.exports = {
+    
     sessionCheck : (req,res,next)=>{
         if (req.session.admin){
 

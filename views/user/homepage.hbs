@@ -1,59 +1,47 @@
 <!-- start banner Area -->
-<section class="banner-area">
-	<div class="container">
-		<div class="row fullscreen align-items-center justify-content-start">
-			<div class="col-lg-12">
-				<div class="active-banner-slider owl-carousel">
-					<!-- single-slide -->
-					<div class="row single-slide align-items-center d-flex">
-						<div class="col-lg-5 col-md-6">
-							<div class="banner-content">
-								<h1>New shoes<br>Collection!</h1>
-								<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-									incididunt ut labore et
-									dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.</p>
-								<div class="add-bag d-flex align-items-center">
-									<a class="add-btn" href=""><span class="lnr lnr-cross"></span></a>
-									<span class="add-text text-uppercase">Add to Bag</span>
-								</div>
-							</div>
-						</div>
-						<div class="col-lg-7">
-							<div class="banner-img">
-								<img class="img-fluid" src="img/banner/banner-img.png" alt="">
-							</div>
-						</div>
-					</div>
-					<!-- single-slide -->
-					<div class="row single-slide">
-						<div class="col-lg-5">
-							<div class="banner-content">
-								<h1> New shoes<br>Collection!</h1>
-								<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-									incididunt ut labore et
-									dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.</p>
-								<div class="add-bag d-flex align-items-center">
-									<a class="add-btn" href=""><span class="lnr lnr-cross"></span></a>
-									<span class="add-text text-uppercase">Add to Bag</span>
-								</div>
-							</div>
-						</div>
-						<div class="col-lg-7">
-							<div class="banner-img">
-								<img class="img-fluid" src=""
-									C:\Users\JESHIN\Downloads\structural-geometrical-app-cover-template\4949813.jpg""
-									alt="">
-							</div>
-						</div>
-					</div>
-				</div>
+<div id="carouselExampleControls" class="carousel slide" style="width: 100%;" data-ride="carousel">
+	<div class="carousel-inner">
+		<div class="carousel-item active">
+			<img class="d-block w-100" src="img/banner/banner-img2.jpg" alt="Banner {{@index}}">
+			<div class="carousel-caption d-none d-md-block">
+				<h5 style="text-align: left; color: aliceblue; padding-top: 50px;">Nike Pegasus 40</h5>
+				<h1 style="text-align: left;">
+					<span style="font-size: larger; font-weight: 900; color: aliceblue;">
+						<strong>THE WORLD RUNS <br> IN PEGASUS</strong>
+					</span>
+				</h1>
+				<h5 style="text-align: left; color: aliceblue; ">Oh, the miles we’ve seen. <br> This premium release features throwback <br>
+colorways and swooshes plucked from past models.</h5>
+<h5 style="text-align: left; color: aliceblue; padding-top: 200px;"></h5>
+
+			</div>
+		</div>
+		<div class="carousel-item">
+			<img class="d-block w-100" src="img/banner/banner-img3.jpg" alt="Banner {{@index}}">
+			<div class="carousel-caption d-none d-md-block">
+				<h5 style="text-align: left; color: aliceblue;">Nike Pegasus 40</h5>
+				<h1 style="text-align: left;">
+					<span style="font-size: larger; font-weight: 900; color: aliceblue;">
+						<strong>THE WORLD RUNS <br> IN PEGASUS</strong>
+					</span>
+				</h1>
 			</div>
 		</div>
 	</div>
-</section>
+	<a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+		<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+		<span class="sr-only">Previous</span>
+	</a>
+	<a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+		<span class="carousel-control-next-icon" aria-hidden="true"></span>
+		<span class="sr-only">Next</span>
+	</a>
+</div>
+
+
 <!-- End banner Area -->
 
-
+<br><br>
 
 <!-- start product Area -->
 <section class="">
@@ -63,27 +51,56 @@
 			<div class="row justify-content-center">
 				<div class="col-lg-6 text-center">
 					<div class="section-title">
-						<h1>SEASON'S BEST</h1>
+						<h5>Summer Essentials</h5>
+						<h1><span style="font-size: larger; font-weight: 900; "><strong>CHASE THE DAY</strong></span>
+							<h6>Move. Explore. Bring your boldest. Get after summer’s endless possibilities with
+								ready-for- anything fits</h6>
+
 
 					</div>
 				</div>
+
 			</div>
 
 
-			
+			<ul class="nav nav-tabs justify-content-center mb-55" id="myTab" role="tablist">
+				<li class="nav-item" role="presentation">
+					<button style="color: #ff6f00" class="nav-link active" id="home-tab" data-bs-toggle="tab"
+						data-bs-target="#home" type="button" role="tab" aria-selected="true">All FASHION</button><br>
+
+				</li>
+
+				{{#each categories}}
+				<form method="POST" action="/filter-product">
+					<li class="nav-item" role="presentation">
+						<input type="hidden" name="name" value="{{this.name}}">
+						<button style="color: #ff6f00" class="nav-link active" id="profile-tab" type="submit" role="tab"
+							aria-selected="true">{{this.name}}</button>
+
+					</li>
+				</form>
+
+				{{/each}}
+
+			</ul>
+			<h2>Featured</h2>
 
 
 
 
-									
+
+
+
 			<div class="row">
+
 				<!-- single product -->
-				{{#each product}}
+				{{#each products}}
 				<div class="col-lg-3 col-md-6">
 
 					<div class="single-product">
 
-						<a href="/product-detail?id={{this._id}}"><img class="img-fluid" src="/product-pictures/{{this.img1}}" alt=""></a>
+						<a href="/product-detail?id={{this._id}}"><img class="img-fluid"
+								src="/product-pictures/{{this.img1}}" alt=""></a>
 						<div class="product-details">
 							<h3 style="color: #ff6f00;">{{this.name}}</h3>
 							<h6>{{this.description}}</h6>
@@ -94,7 +111,7 @@
 							<div class="price">
 
 								<h6>₹{{this.price}}</h6>
-								
+
 							</div>
 
 
@@ -102,16 +119,24 @@
 
 							<div class="prd-bottom">
 
-							
-								<a class="social-info" onclick="addToCart('{{this._id}}')">
-									<span class="lnr lnr-move"></span>
+
+								<a class="social-info" href="/add-to-cart/{{this._id}}">
+									<span class="ti-bag"></span>
 									<p class="hover-text">Add To Cart</p>
 								</a>
-								<a href="" class="social-info">
+								{{!-- <a href="/add-to-wishlist/{{this._id}}" class="social-info">
 									<span class="lnr lnr-heart"></span>
 									<p class="hover-text">Wishlist</p>
+								</a> --}}
+								<a href="/add-to-wishlist/{{this._id}}" class="social-info">
+									{{#if this.isWishlisted}}
+									<span class="fas fa-heart" style="font-size:14px; color:#ff6f00;"></span>
+									{{else}}
+									<span class="lnr lnr-heart"></span>
+									{{/if}}
+									<p class="hover-text">Wishlist</p>
 								</a>
-								
+
 								{{!-- <a href="" class="social-info">
 									<span class="lnr lnr-move"></span>
 									<p class="hover-text">view more</p>
@@ -129,9 +154,51 @@
 					</div>
 				</div>
 				{{/each}}
-
-
 			</div>
+
+{{!-- 
+			<nav aria-label="Page navigation example">
+				<ul class="pagination justify-content-center mb-5">
+					<li class="page-item">
+						<a class="page-link" href="#" aria-label="Previous">
+							<span aria-hidden="true">&laquo;</span>
+						</a>
+					</li>
+					{{#each pages}}
+					<li class="page-item"><a class="page-link" href="/productPagination?id={{this}}"
+							aria-label="page {{this}}">{{this}}</a></li>
+					{{/each}}
+					<li class="page-item">
+						<a class="page-link" href="#" aria-label="Next">
+							<span aria-hidden="true">&raquo;</span>
+						</a>
+					</li>
+				</ul>
+			</nav> --}}
+				<nav aria-label="Page navigation example">
+		<ul class="pagination">
+			<li class="page-item">
+				<a class="page-link" href="#" aria-label="Previous">
+					<span aria-hidden="true">&laquo;</span>
+				</a>
+			</li>
+			{{#for 1 pages 1}}
+			 <li class="page-item "><a class="page-link {{#ifCond this ../currentPage}} active {{/ifCond}}" href="/?page={{this}}">{{this}}</a></li>
+			{{/for}}
+
+			<li class="page-item">
+				<a class="page-link" href="#" aria-label="Next">
+					<span aria-hidden="true">&raquo;</span>
+				</a>
+			</li>
+		</ul>
+	</nav><br>
+
+
+
+
+
+
 		</div>
 	</div>
 	<!-- single product slide -->

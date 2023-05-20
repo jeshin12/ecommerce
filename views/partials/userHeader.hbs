@@ -16,27 +16,11 @@
 					<div class="collapse navbar-collapse offset" id="navbarSupportedContent">
 						<ul class="nav navbar-nav menu_nav ml-auto">
 							<li class="nav-item"><a class="nav-link" href="/">Home</a></li>
-							<li class="nav-item submenu dropdown">
-								<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-								 aria-expanded="false">Categories</a>
-								<ul class="dropdown-menu">
-									<li class="nav-item"><a class="nav-link" href="#">Shop Category</a></li>
-									<li class="nav-item"><a class="nav-link" href="#">Product Details</a></li>
-									<li class="nav-item"><a class="nav-link" href="#">Product Checkout</a></li>
-									<li class="nav-item"><a class="nav-link" href="#">Shopping Cart</a></li>
-									<li class="nav-item"><a class="nav-link" href="#">Confirmation</a></li>
-								</ul>
-							</li>
-							{{!-- <li class="nav-item submenu dropdown">
-								<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-								 aria-expanded="false">Blog</a>
-								<ul class="dropdown-menu">
-									<li class="nav-item"><a class="nav-link" href="blog.html">Blog</a></li>
-									<li class="nav-item"><a class="nav-link" href="single-blog.html">Blog Details</a></li>
-								</ul>
-							</li> --}}
+							{{#if user}}
 
-							{{!-- <li class="nav-item"><a class="nav-link" href="/wishlist">Wishlist</a></li> --}}
+							<li class="nav-item"><a class="nav-link" href="/wishlist">Wishlist</a></li>
+
+							{{/if}}
 
 							
 								 {{#if user}}
@@ -67,22 +51,31 @@
 							</li>
 
 							{{/if}} 
-
-							
-							
-							    
-
-							
-
-							
 							<li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
 						</ul>
+
+
 						<ul class="nav navbar-nav navbar-right">
-							<li class="nav-item"><a href="#" class="cart"><span class="ti-bag"></span></a></li>
+
+							{{#if user}}
+
+							<li class="nav-item">
+								<a href="/cart" class="cart">
+									
+									<span id="cart-count" class="ti-bag">
+										<span style="color: #ff6f00">{{cartCount}}</span>
+									</span>
+
+									
+
+								</a>
+							</li>
+							{{/if}}
 							<li class="nav-item">
 								<button class="search"><span class="lnr lnr-magnifier" id="search"></span></button>
 							</li>
 						</ul>
+
 					</div>
 				</div>
 			</nav>

@@ -6,64 +6,62 @@ const { resolve } = require('path')
 
 
 
-module.exports={
+module.exports = {
+
     doadminLoged: (adminData) => {
+        return new Promise(async (resolve, reject) => {
+            let loginStatus = false;
+            let response = {}
+            let admin = await db.get().collection(collection.ADMIN_COLLECTION).findOne({ email: adminData.email })
 
-        return new Promise(async (resolve,reject)=>{
-            let loginStatus=false;
-            let response={}
-            let admin = await db.get().collection(collection.ADMIN_COLLECTION).findOne({email:adminData.email})
+            if (admin) {
+                bcrypt.compare(adminData.password, admin.password).then((status) => {
 
-            if(admin){
-
-                bcrypt.compare(adminData.password,admin.password).then((status)=>{
-                   
-                    if(status){
-                        response.admin=admin
-                        response.status=true
+                    if (status) {
+                        response.admin = admin
+                        response.status = true
                         resolve(response);
-                    }else{
+                    } else {
                         console.log('Login failedddddd');
-                        reject({status:false})
+                        reject({ status: false })
                     }
-                }).catch(()=>{
+                }).catch(() => {
                     reject(error)
                 })
             }
-            else{
+            else {
                 console.log('Login failed');
-                    reject({status:false})
+                reject({ status: false })
             }
         })
-      },
-      blockUser:(userId)=>{
+    },
 
-        return new Promise((resolve,reject)=>{
-            
 
-            
-            db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(userId) },{
-                $set:{
+    blockUser: (userId) => {
+        return new Promise((resolve, reject) => {
+            db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(userId) }, {
+                $set: {
                     isBlocked: true
                 }
             }).then((response) => {
-               
+
                 resolve()
             })
         })
-        
-      },
-      unblockUser:(userId)=>{
 
-        return new Promise((resolve,reject)=>{
-            db.get().collection(collection.USER_COLLECTION).updateOne({_id: ObjectId(userId) },{
-                $set:{
+    },
+
+
+    unblockUser: (userId) => {
+        return new Promise((resolve, reject) => {
+            db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(userId) }, {
+                $set: {
                     isBlocked: false
                 }
             }).then((response) => {
                 resolve()
             })
         })
-        
-      }
+
     }
+}

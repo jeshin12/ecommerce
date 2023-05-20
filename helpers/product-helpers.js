@@ -1,6 +1,7 @@
 var db = require('../dbconfig/connection')
 var collection = require('../dbconfig/collection')
 const { ObjectId } = require('mongodb');
+var objectId= require('mongodb'). ObjectId
 const { resolve } = require('path');
 
 
@@ -10,6 +11,7 @@ module.exports={
 
     addProduct: (product) => {
         console.log(product);
+        product.price = parseInt(product.price);
         return new Promise((resolve, reject) => {
 
             db.get().collection(collection.PRODUCT_COLLECTION).insertOne(product).then((res) => {
@@ -36,6 +38,8 @@ module.exports={
         })
     },
     getProductDetails:(prodId)=>{
+
+       
         return new Promise((resolve,reject)=>{
             db.get().collection(collection.PRODUCT_COLLECTION).findOne({_id:ObjectId(prodId)}).then((product)=>{
                 resolve(product)
@@ -49,9 +53,11 @@ module.exports={
         })
     },
     updateProduct:(prodId, proDetails)=>{
-
-        console.log(prodId, proDetails, 'fffffffffffffffffffffffffffffffffffffffffffffffffffffff');
+        console.log(proDetails,"&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+        proDetails.price = parseInt(proDetails.price);
+       
         return new Promise((resolve,reject)=>{
+            
             db.get().collection(collection.PRODUCT_COLLECTION). 
             updateOne({_id:ObjectId(prodId)},{
                 $set: {
@@ -60,7 +66,11 @@ module.exports={
                    categoryid:proDetails.categoryid,
                     price:proDetails.price,
                     color:proDetails.color,
-                    description: proDetails.description
+                    description: proDetails.description,
+                    img1: proDetails.img1,
+                    img2 : proDetails.img2,
+                    img3 : proDetails.img3
+                   
                 }
             }).then((response)=>{
                 resolve(response)
@@ -78,6 +88,38 @@ module.exports={
         return new Promise(async(resolve,reject)=>{
             let category=await db.get().collection(collection.CATEGORY_COLLECTION).find().toArray()
             resolve(category)
+        })
+    },
+
+    filterByCategory:(proCategory)=>{
+       
+        return new Promise(async(resolve,reject)=>{
+
+            let ShowProducts=await db.get().collection(collection.PRODUCT_COLLECTION).find({categoryid:proCategory.name}).toArray()
+            
+            resolve(ShowProducts)
+        }).catch((error)=>{
+
+            reject()
+        })
+    },
+    getProductQuantity: (details) => {
+        return new Promise(async (resolve, reject) => {
+            let product = await db.get().collection(collection.PRODUCT_COLLECTION).findOne({ _id: objectId(details.product) })
+            let availableQty = product.quantity
+            resolve(availableQty)
+        })
+    },
+    getProductCount: () => {
+        return new Promise(async (resolve, reject) => {
+            let count = await db.get().collection(collection.PRODUCT_COLLECTION).countDocuments()
+            resolve(count)
+        })
+    },
+    getPaginatedProducts: (skip, limit) => {
+        return new Promise(async (resolve, reject) => {
+            let products = await db.get().collection(collection.PRODUCT_COLLECTION).find().skip(skip).limit(limit).toArray()
+            resolve(products)
         })
     }
     

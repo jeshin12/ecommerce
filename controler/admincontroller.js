@@ -7,11 +7,14 @@ const { getAllUser } = require('../helpers/user-helpers');
 
 const{getAllcategory,AddCategorys}=require('../helpers/category-helpers');
 const productHelpers = require('../helpers/product-helpers');
+const { log } = require('console');
 
 
 
 
 module.exports={
+    
+ 
     adminLoginpage(req,res){
        
         res.render('admin/adminLogin',{ layout: 'admin-layout' });
@@ -89,6 +92,9 @@ module.exports={
      productTable(req,res){
         getAllproduct().then((product)=>{
 
+            console.log(product,"66666666666666666666666");
+            console.log(product.img1,"111111111111111111111111111111");
+
             res.render('admin/productTable',{layout:'admin-layout',admin: true,product})
 
         })
@@ -101,8 +107,9 @@ module.exports={
             })
 
         },
+
         addProductSubmit(req, res) {
-            console.log("qaaaaaaaaaaaa");
+            console.log("qaaaaaaaaaaaa",req.files);
 
             req.body.img1 = req.files.productImage1[0].filename
             req.body.img2 = req.files.productImage2[0].filename
@@ -137,8 +144,16 @@ module.exports={
 
 
         editProductSubmit(req,res){
+
+         console.log(req.files,">>>>>>>>okbro<<<<<<<<")
+
+         req.body.img1 = req.files.productImage1[0].filename
+            req.body.img2 = req.files.productImage2[0].filename
+            req.body.img3 = req.files.productImage3[0].filename
             
             updateProduct(req.params.id,req.body).then((response)=>{
+
+                console.log(response,"%%%%%%%%%%%");
                 res.redirect('/admin/productTable')
             })
         },
@@ -162,19 +177,30 @@ module.exports={
 
            addcategory(req,res){
 
-            res.render('admin/addCategory',{layout: 'admin-layout', admin:true})
+            res.render('admin/addCategory',{layout: 'admin-layout', admin:true,errMessage: req.flash('userExists')})
 
            },
 
-           addCategorySubmit(req,res){
+        
 
-                AddCategorys(req.body).then((addcategory)=>{
-                    
-                    console.log(req.body);
+        addCategorySubmit(req,res){
 
-                    res.redirect('/admin/allcategory')
-                })
-           }
+            AddCategorys(req.body).then((addcategory)=>{
+                
+                console.log(req.body);
+
+                res.redirect('/admin/allcategory')
+            }).catch((response)=>{
+
+                if (response.categoryExists) {
+                    req.flash('userExists', 'This category is already exitsted !')
+                    res.redirect('/admin/add-category')
+                  }
+            })
+       },
+
+
+       
            
        
 

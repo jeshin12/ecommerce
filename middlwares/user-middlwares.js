@@ -1,10 +1,5 @@
-const { response } = require("express");
-const userHelpers = require("../helpers/user-helpers");
-var db = require('../dbconfig/connection')
-var collection = require('../dbconfig/collection')
-const { ObjectId } = require('mongodb')
-
 const { getUserDetails } = require('../helpers/user-helpers')
+var productHelpers = require("../helpers/product-helpers");
 
 module.exports = {
     sessionCheck: (req, res, next) => {
@@ -24,7 +19,25 @@ module.exports = {
 
         } else {
 
-            res.redirect('/login');
+            productHelpers.getAllproduct().then((product) => {
+                
+                res.render('user/landingPage', { logged: false,product})
+
+            })
+        }
+    },
+
+    verifyLogin(req, res, next) {
+        if (req.session.loggedIn) {
+            console.log("log aanu");
+            next()
+        } else {
+            console.log("logalla")
+            res.redirect('/login')
+            //   res.render('user/userLogin')
+            console.log("Ethunnundo");
+            // 
+            // res.send("fdhfsgfgsh")
         }
     },
 
@@ -32,7 +45,7 @@ module.exports = {
 
     nocache: (req, res, next) => {
         res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
-        res.header('Expires', '-1');
+        res.header('Expires', '-3');
         res.header('Pragma', 'no-cache');
         next();
     }

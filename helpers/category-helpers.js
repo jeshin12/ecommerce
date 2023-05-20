@@ -7,32 +7,31 @@ const { resolve } = require('path')
 
 module.exports={
 
-    // AddCategorys:(addcategory)=>{
+    
 
-    //     console.log(category);
-
-    //     return new Promise((resolve,reject)=>{
-    //         db.get().collection(collection.CATEGORY_COLLECTION).insertOne(category).then((res)=>{
-    //             resolve({id:res.insertedId})
-    //         })
-    //     })
-
-    // },
-
-    AddCategorys:(addcategory)=>{
+    AddCategorys: (addcategory) => {
         console.log(addcategory);
-        addcategory.date=new Date()
-        return new Promise(async(resolve,reject)=>{
-         
-     db.get().collection(collection.CATEGORY_COLLECTION).insertOne(addcategory).then((addcategory)=>{
+        addcategory.date = new Date()
+        return new Promise(async (resolve, reject) => {
+
+            let adminWithcategory = await db.get().collection(collection.CATEGORY_COLLECTION).find({ name: addcategory.name }).toArray()
+
+            let rejectResponse = {}
+
+            if (adminWithcategory.length > 0) {
+                rejectResponse.categoryExists = true
+                reject(rejectResponse)
+            }else{
+                db.get().collection(collection.CATEGORY_COLLECTION).insertOne(addcategory).then((addcategory) => {
+
+                    resolve(addcategory)
+                })
+
+            }
+        })
+    },
+
         
-            resolve(addcategory)
-        })
-    
-        })
-           
-    
-        },
 
     getAllcategory:()=>{
 
@@ -41,6 +40,8 @@ module.exports={
             let getcategory=await db.get().collection(collection.CATEGORY_COLLECTION).find().sort({date:-1}).toArray()
             resolve(getcategory)
         })
-    }
+    },
+
+    
    
 }

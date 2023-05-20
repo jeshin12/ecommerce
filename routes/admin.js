@@ -45,7 +45,11 @@ router.post('/addProductSubmit', upload.fields( [
 
  router.get('/delete-product/:id',removeProduct)
 
- router.post('/edit-product/:id',editProductSubmit)
+ router.post('/edit-product/:id',  upload.fields( [
+  { name : 'productImage1' , maxCount : 1 } ,
+{ name : 'productImage2' , maxCount : 1 } , 
+{ name : 'productImage3' , maxCount : 1 } ] ) ,
+editProductSubmit)
 
  router.get('/blockUser', adminBlockUser)
 
