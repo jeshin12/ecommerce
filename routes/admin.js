@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
-const {adminLoginpage,adminHome,loginAdmin,signOut,dashboard,adminAlluser,productTable,addproduct,addProductSubmit,removeProduct,editProduct,editProductSubmit,adminBlockUser,adminUnBlockUser,categorypage,addcategory,addCategorySubmit}=require('../controler/admincontroller')
+const {adminLoginpage,adminHome,loginAdmin,signOut,dashboard,adminAlluser,productTable,addproduct,
+  addProductSubmit,removeProduct,editProduct,editProductSubmit,adminBlockUser,adminUnBlockUser,categorypage,
+  addcategory,addCategorySubmit,getOrders,viewOrderProduct,viewOffer,addCoupenPost,removeCoupen}=require('../controler/admincontroller')
 
 const{sessionCheck,loginRedirect,nocache}=require('../middlwares/admin-middlwares')
 
@@ -37,10 +39,7 @@ router.post('/edit-product',editProduct)
 
 
 
-router.post('/addProductSubmit', upload.fields( [
-   { name : 'productImage1' , maxCount : 1 } ,
- { name : 'productImage2' , maxCount : 1 } , 
- { name : 'productImage3' , maxCount : 1 } ] ) ,
+router.post('/addProductSubmit', upload.fields( [ { name : 'productImage1' , maxCount : 1 } ,{ name : 'productImage2' , maxCount : 1 } , { name : 'productImage3' , maxCount : 1 } ] ) ,
  addProductSubmit);
 
  router.get('/delete-product/:id',removeProduct)
@@ -62,6 +61,17 @@ router.get('/allcategory',categorypage);
 router.get('/add-category',addcategory);
 
 router.post('/addCategorySubmit',addCategorySubmit)
+
+router.get('/orderTable',getOrders)
+
+router.get('/view-product',viewOrderProduct)
+
+
+router.get('/offer' , viewOffer)
+
+router.post('/addcoupon' , addCoupenPost)
+
+router.get('/delete-coupen/:id' , removeCoupen)
 
 
 

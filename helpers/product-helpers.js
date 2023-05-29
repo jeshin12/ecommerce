@@ -121,7 +121,54 @@ module.exports={
             let products = await db.get().collection(collection.PRODUCT_COLLECTION).find().skip(skip).limit(limit).toArray()
             resolve(products)
         })
-    }
+    },
+    getAllOrders: () => {
+        return new Promise(async (resolve, reject) => {
+          try {
+            let order = await db.get().collection(collection.ORDER_COLLECTION).find().sort({ _id: -1 }).toArray();
+            resolve(order);
+          } catch (error) {
+            reject(error);
+          }
+        });
+      },
+
+      getOrderProduct: (oneProId) => {
+        return new Promise(async (resolve, reject) => {
+            let orderProduct = await db.get().collection(collection.ORDER_COLLECTION).aggregate([
+                {
+                    $match: { _id: objectId(oneProId) }
+                },
+                {
+                    $unwind: '$products'
+                },
+                {
+                    $project: {
+                        item: '$products.item',
+                        quantity: '$products.quantity'
+                    }
+                },
+                {
+                    $lookup: {
+                        from: collection.PRODUCT_COLLECTION,
+                        localField: 'item',
+                        foreignField: '_id',
+                        as: 'product'
+                    }
+                },
+                {
+                    $project: {
+                        item: 1,
+                        quantity: 1,
+                        product: { $arrayElemAt: ['$product', 0] }
+                    }
+                }
+
+            ]).toArray()
+            console.log(orderProduct,'llllllllllllll');
+            resolve(orderProduct)
+        })
+    },
     
    
 

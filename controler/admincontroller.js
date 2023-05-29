@@ -1,6 +1,6 @@
 const { response } = require('express');
 
-const {doadminLoged,blockUser,unblockUser} = require('../helpers/admin-helpers')
+const {doadminLoged,blockUser,unblockUser,viewCoupens,addCoupen,deleteCoupen} = require('../helpers/admin-helpers')
 const{getAllproduct,addProduct,deleteProduct,getProductDetails,updateProduct}= require('../helpers/product-helpers')
 
 const { getAllUser } = require('../helpers/user-helpers');
@@ -20,10 +20,12 @@ module.exports={
         res.render('admin/adminLogin',{ layout: 'admin-layout' });
 
     },
-    adminHome(req,res){
+    adminHome:(async(req,res)=>{
+
+       
 
         res.render('admin/adminHome',{ layout: 'admin-layout', admin: true })
-    },
+    }),
 
     dashboard(req,res){
 
@@ -109,7 +111,7 @@ module.exports={
         },
 
         addProductSubmit(req, res) {
-            console.log("qaaaaaaaaaaaa",req.files);
+           
 
             req.body.img1 = req.files.productImage1[0].filename
             req.body.img2 = req.files.productImage2[0].filename
@@ -198,12 +200,80 @@ module.exports={
                   }
             })
        },
+       getOrders(req, res) {
+        productHelpers.getAllOrders().then((order) => {
+            res.render('admin/OrderTable', { layout: 'admin-layout', admin:true, order })
+        })
+
+    },
+    viewOrderProduct(req, res) {
+        const oneProductId = req.query.id
+        console.log(oneProductId,"oooooooooo");
+        productHelpers.getOrderProduct(oneProductId).then((oneOrderProduct) => {
+            res.render('admin/viewOrderProduct', { layout: 'admin-layout', admin:true, oneOrderProduct })
+        })
+    },
 
 
+
+    // addCoupenPost (req , res) {
+    //     const couponCode = Math.random().toString(36).substring(2, 10);
+    //     addCoupen(req.body , couponCode).then((response) => {
+    //         if(response.message){
+    //             req.session.Eror = response.message
+    //         }
+    //         res.redirect('/admin/offer')
+    //     })
+    // },
+
+    addCoupenPost(req, res) {
+        const couponCode = Math.random().toString(36).substring(2, 10);
+        const { startdate, endingdate } = req.body;
+      
+        if (startdate < endingdate) {
+          addCoupen(req.body, couponCode)
+            .then((response) => {
+              if (response.message) {
+                console.log('pppppppppp');
+                req.session.error = response.message;
+              }
+              res.redirect('/admin/offer');
+            })
+            .catch((error) => {
+                console.log(erooreeeeeeee);
+              console.error(error);
+              // Handle error
+              res.redirect('/admin/offer');
+            });
+        } else {
+            console.log('llllllllllllll');
+          req.session.Eror = "Starting date must be greater than ending date";
+          res.redirect('/admin/offer');
+        }
+      },
+      
+   
+    
+    
+    
+
+
+    viewOffer (req , res) {
+        viewCoupens().then((coupen) => {
+            res.render('admin/view-offer' , {layout: 'admin-layout', admin:true,coupen , oferEror:req.session.Eror})
+            req.session.Eror = null
+        })
+    },
+
+    removeCoupen (req , res){
+        let coupenId = req.params.id
+        deleteCoupen(coupenId).then((response) => {
+            res.redirect('/admin/offer')
+        })
+    },
        
            
-       
-
+    
      
      
       

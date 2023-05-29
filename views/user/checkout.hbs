@@ -21,7 +21,7 @@
 
         <div class="cupon_area">
             <div class="check_title">
-                <h2>Have a coupon? <a href="/checkCoupen">Click here to enter your code</a></h2>
+                <h2>Have a coupon? <a href="/Viewoffers">Click here to enter your code</a></h2>
             </div>
 
             <input type="text" placeholder="Enter coupon code" id="couponInput">
@@ -36,7 +36,7 @@
 
 
 
-        <div class="billing-select mb-20">
+        {{!-- <div class="billing-select mb-20">
             <label style="padding-top: 5px; padding-left: 20px;"> <abbr class="required" title="required"></abbr>
             </label>
             <select onchange="getAddress()" placeholder="Please" id="address">
@@ -51,16 +51,17 @@
 
             </select>
 
-        </div>
+        </div> --}}
 
 
 
 
 
 
-        <div style="margin-left: 650px;">
+        {{!-- <div style="margin-left: 650px;">
             <a class="tp_btn" href="/addAddress">Add Address</a>
-        </div>
+        </div> --}}
+        
 
         <h4 style="padding-left: 300px;">Enter Delivery Address</h4>
         <div class="billing_details">
@@ -74,7 +75,7 @@
 
 
 
-                    <form class="row contact_form" action="/place-order" method="post" novalidate="novalidate"
+                    <form class="row contact_form"  novalidate="novalidate"
                         id="checkout-form">
 
 
@@ -88,21 +89,27 @@
 
                         <div class="col-md-12 form-group p_star">
                             <input type="text" class="form-control" id="name" name="uname"
-                                value="{{this.userDetails.username}}" placeholder="Name" onfocus="this.placeholder = ''"
+                                value="{{this.user.name}}" placeholder="Name" onfocus="this.placeholder = ''"
                                 onblur="this.placeholder = 'name'">
                         </div>
 
 
                         <div class="col-md-6 form-group p_star">
-                            <input type="number" class="form-control" id="number" name="number"
-                                value="{{this.userDetails.phone}}" placeholder="Phone number"
+                            <input type="number" class="form-control" id="number" name="mobile"
+                                value="{{this.user.mobile}}" placeholder="Phone number"
                                 onfocus="this.placeholder = ''" onblur="this.placeholder = 'Phone number'">
                         </div>
 
 
                         <div class="col-md-6 form-group p_star">
                             <input type="email" class="form-control" id="email" name="email"
-                                value="{{this.userDetails.email}}" placeholder="Email" onfocus="this.placeholder = ''"
+                                value="{{this.user.email}}" placeholder="Email" onfocus="this.placeholder = ''"
+                                onblur="this.placeholder = 'name'">
+                        </div>
+
+                         <div class="col-md-6 form-group p_star">
+                            <input type="email" class="form-control" id="address" name="address"
+                                value="{{this.user.address.[0].address}}" placeholder="address" onfocus="this.placeholder = ''"
                                 onblur="this.placeholder = 'name'">
                         </div>
 
@@ -115,11 +122,11 @@
                                 onfocus="this.placeholder = ''" onblur="this.placeholder = 'Home number'">
                         </div>
 
-                        <div class="col-md-6 form-group p_star">
+                        {{!-- <div class="col-md-6 form-group p_star">
                             <input type="number" class="form-control" id="street number"
                                 value="{{this.address.streetNumber}}" name="streetNumber" placeholder="street number"
                                 onfocus="this.placeholder = ''" onblur="this.placeholder = 'street number'">
-                        </div>
+                        </div> --}}
 
 
                         <div class="col-md-6 form-group p_star">
@@ -148,7 +155,7 @@
 
                         <div class="payment_item">
                             <div class="radion_btn">
-                                <input type="radio" id="f-option5" name="payment-method" value="COD">
+                                <input type="radio" id="f-option5" name="payment-method" value="COD" checked>
                                 <label for="f-option5">COD</label>
                                 <div class="check"></div>
                             </div>
@@ -159,27 +166,28 @@
                             <div class="radion_btn">
                                 <input type="radio" id="f-option6" name="payment-method" value="RAZORPAY">
                                 <label for="f-option6">Razorpay </label>
-                                <img src="img/product/card.jpg" alt="">
+                                
                                 <div class="check"></div>
                             </div>
                         </div>
 
-
-                        <div class="payment_item">
+ 
+                        {{!-- <div class="payment_item">
                             <div class="radion_btn">
+                                
                                 <input type="radio" id="f-option7" name="payment-method" value="PAYPAL">
                                 <label for="f-option7">Paypal </label>
-                                <img src="img/product/card.jpg" alt="">
+                               
                                 <div class="check"></div>
                             </div>
-                        </div>
+                        </div> --}}
 
 
                         <div class="payment_item">
                             <div class="radion_btn">
                                 <input type="radio" id="f-option8" name="payment-method" value="WALLET">
                                 <label for="f-option8">Wallet</label>
-                                <img src="img/product/card.jpg" alt="">
+                                
                                 <div class="check"></div>
                             </div>
                         </div>
@@ -220,8 +228,8 @@
                             <ul class="list list_2">
 
 
-                                <li><a href="#">Total Price<span id="₹totalPrice">₹ {{total}}</span></a></li>
-                                <li><a href="#">Discount Price <span id="discountPrice">₹ {{total}}</span></a></li>
+                                <li><a href="#">Total Price<span id="totalPrice">₹ {{total}}</span></a></li>
+                                <li><a href="#">Discount Price <span id='discountPrice'>₹ {{total}}</span></a></li>
                                 <li><a href="#">You Saved <span id="savedPrice">₹ {{total}}</span></a></li>
 
                             </ul>
@@ -276,7 +284,12 @@
                     'Your order is placed successfully!',
                     'success'
                 ).then(() => {
-                    location.href='/userOrderview'
+                    if(response.Success){
+                        location.href='/userOrderview'
+                    }else{
+                         razorpayPayment(response)
+                    }
+                    
                 })
 
 
@@ -289,12 +302,12 @@
 
     function razorpayPayment(order) {
         var options = {
-            "key": "rzp_test_PG0ec8LXfIoGFG",
+            "key": "rzp_test_6TwAbY5JkBXwMZ",
             "amount": order.amount,
             "currency": "INR",
-            "name": "MyWatch",
+            "name": "Instyle",
             "description": "Test Transaction",
-            "image": "https://example.com/your_logo",
+            "image": "img/fav1.png",
             "order_id": order.id,
             "callback_url": "https://eneqd3r9zrjok.x.pipedream.net/",
 
@@ -329,7 +342,7 @@
             method: 'post',
             success: (response) => {
                 if (response.status) {
-                    location.href = '/order-completion'
+                  location.href='/userOrderview'
                 }
                 else {
                     alert("payment failed")
@@ -355,7 +368,7 @@
                     document.getElementById('totalAmount').innerHTML = response.amount
                     document.getElementById("Details").hidden = false
                     document.getElementById('totalPrice').innerHTML = response.originalPrice
-                    document.getElementById('discountPrice').innerHTML = response.amount
+                    document.getElementById('discountPrice').innerHTML = response.discountAmount
                     document.getElementById('savedPrice').innerHTML = response.savedAmount
                 }
                 else {
