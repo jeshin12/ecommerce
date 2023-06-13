@@ -2,7 +2,8 @@ var express = require('express');
 var router = express.Router();
 const {adminLoginpage,adminHome,loginAdmin,signOut,dashboard,adminAlluser,productTable,addproduct,
   addProductSubmit,removeProduct,editProduct,editProductSubmit,adminBlockUser,adminUnBlockUser,categorypage,
-  addcategory,addCategorySubmit,getOrders,viewOrderProduct,viewOffer,addCoupenPost,removeCoupen}=require('../controler/admincontroller')
+  addcategory,addCategorySubmit,getOrders,viewOrderProduct,viewOffer,addCoupenPost,removeCoupen,productStatus,
+  inventoryManagement,editStockPost,productCoupen,productOfferPost}=require('../controler/admincontroller')
 
 const{sessionCheck,loginRedirect,nocache}=require('../middlwares/admin-middlwares')
 
@@ -34,46 +35,50 @@ router.get('/alluser',adminAlluser);
 router.get('/productTable',productTable)
 
 router.get('/add-product',addproduct)
-
 router.post('/edit-product',editProduct)
 
 
 
-router.post('/addProductSubmit', upload.fields( [ { name : 'productImage1' , maxCount : 1 } ,{ name : 'productImage2' , maxCount : 1 } , { name : 'productImage3' , maxCount : 1 } ] ) ,
- addProductSubmit);
-
+// router.post('/addProductSubmit', upload.fields( [ { name : 'productImage1' , maxCount : 1 } ,{ name : 'productImage2' , maxCount : 1 } , { name : 'productImage3' , maxCount : 1 } ] ) ,
+//  addProductSubmit);
+router.post('/addProductSubmit', upload.array('image'), addProductSubmit);
  router.get('/delete-product/:id',removeProduct)
 
- router.post('/edit-product/:id',  upload.fields( [
-  { name : 'productImage1' , maxCount : 1 } ,
-{ name : 'productImage2' , maxCount : 1 } , 
-{ name : 'productImage3' , maxCount : 1 } ] ) ,
-editProductSubmit)
+//  router.post('/edit-product/:id',  upload.fields( [
+//   { name : 'productImage1' , maxCount : 1 } ,
+// { name : 'productImage2' , maxCount : 1 } , 
+// { name : 'productImage3' , maxCount : 1 } ] ) ,
+// editProductSubmit)
+router.post('/edit-product/:id', upload.array('image'), editProductSubmit);
+
 
  router.get('/blockUser', adminBlockUser)
-
  router.get('/unBlockUser',  adminUnBlockUser)
 
 //  router.get('/category',categoryManagement)
 
 router.get('/allcategory',categorypage);
-
 router.get('/add-category',addcategory);
-
 router.post('/addCategorySubmit',addCategorySubmit)
 
-router.get('/orderTable',getOrders)
 
+
+router.get('/orderTable',getOrders)
 router.get('/view-product',viewOrderProduct)
+router.post('/product-status' , productStatus)
+
+
 
 
 router.get('/offer' , viewOffer)
-
 router.post('/addcoupon' , addCoupenPost)
-
 router.get('/delete-coupen/:id' , removeCoupen)
 
+router.get('/productOffer',productCoupen)
+router.post('/addProductOffer/:id' , productOfferPost)
 
 
+router.get('/inventory' , inventoryManagement)
+router.post('/edit-stock/:id' , editStockPost)
 
 module.exports = router;

@@ -16,10 +16,17 @@
 <!-- End Banner Area -->
 
 <!--================Checkout Area =================-->
+
+<style>
+#copyvalue {
+    border: none;
+    outline: none;
+}
+</style>
 <section class="checkout_area section_gap">
     <div class="container">
 
-        <div class="cupon_area">
+        {{!-- <div class="cupon_area">
             <div class="check_title">
                 <h2>Have a coupon? <a href="/Viewoffers">Click here to enter your code</a></h2>
             </div>
@@ -29,6 +36,43 @@
 
             <a class="tp_btn" onclick="coupon()">Apply Coupon</a>
 
+        </div> --}}
+        <div class="billing_details">
+            <div class="row">
+                <div class="col-md-8">
+                    <hr>
+                    <div class="row">
+                        {{#each coupen}}
+                        <div class="alert alert-success  col-md-5 ml-3" role="alert">
+                            <small>Apply</small> <b style="color:black;">{{this.name}} </b><small>to get flat</small><b
+                                style="color:brown"> {{this.value}}%</b> <small>Discount</small>
+                            <input id="copyvalue" type="text" readonly value="{{this.code}}" />
+                        </div>
+                        {{/each}}
+                    </div>
+        
+        
+                </div>
+                <div class="col-md-4 ml-auto">
+                    <form class="row contact_form" id="couponForm" action='' method="post" novalidate="novalidate">
+                        <div class="cupon_area">
+                            <div class="check_title">
+                                <h2>Have a coupon? <a href="/Viewoffers">Click here to see Coupons</a>
+                                </h2>
+                            </div>
+                            <input type="text" placeholder="Enter coupon code" id="couponInput">
+                            <div><span id="errorMsg" style="color: red;"></span></div>
+        
+                            <a class="tp_btn" onclick="coupon()">Apply Coupon</a>
+                    </form>
+                </div>
+                <div class="alert alert-success" id="successAlert" role="alert" hidden>
+                    This is a success alert—check it out!
+                </div>
+                <div id="failedAlert" class="alert alert-danger" role="alert" hidden>
+                    Invalid / Expired Coupon
+                </div>
+            </div>
         </div>
 
 
@@ -36,10 +80,10 @@
 
 
 
-        {{!-- <div class="billing-select mb-20">
+        <div class="billing-select mb-20">
             <label style="padding-top: 5px; padding-left: 20px;"> <abbr class="required" title="required"></abbr>
             </label>
-            <select onchange="getAddress()" placeholder="Please" id="address">
+            <select onchange="updateFormFields()" placeholder="Please" id="address">
                 <option>Select Your Address</option>
 
                 {{#each address}}
@@ -51,16 +95,16 @@
 
             </select>
 
-        </div> --}}
+        </div>
 
 
 
 
 
 
-        {{!-- <div style="margin-left: 650px;">
-            <a class="tp_btn" href="/addAddress">Add Address</a>
-        </div> --}}
+        <div style="margin-left: 650px;">
+            <a class="tp_btn" href="/userprofile">Add Address</a>
+        </div>
         
 
         <h4 style="padding-left: 300px;">Enter Delivery Address</h4>
@@ -107,11 +151,11 @@
                                 onblur="this.placeholder = 'name'">
                         </div>
 
-                         <div class="col-md-6 form-group p_star">
+                         {{!-- <div class="col-md-6 form-group p_star">
                             <input type="email" class="form-control" id="address" name="address"
                                 value="{{this.user.address.[0].address}}" placeholder="address" onfocus="this.placeholder = ''"
                                 onblur="this.placeholder = 'name'">
-                        </div>
+                        </div> --}}
 
 
 
@@ -201,7 +245,7 @@
 
 
 
-                        <button class="primary-btn" type="submit">Place Order</button>
+                        <button class="primary-btn" type="submit" >Place Order</button>
 
 
                     </form>
@@ -279,14 +323,17 @@
             data: $('#checkout-form').serialize(),
             success: (response) => {
 
-                swal(
+                Swal.fire(
                     'Good job!',
                     'Your order is placed successfully!',
                     'success'
                 ).then(() => {
                     if(response.Success){
                         location.href='/userOrderview'
-                    }else{
+                    }else if (response.walletSuccess) {
+                            location.href = '/userOrderview'
+                        }
+                    else{
                          razorpayPayment(response)
                     }
                     
@@ -364,7 +411,13 @@
             },
             method: 'post',
             success: (response) => {
-                if (response.verify) {
+
+                Swal.fire(
+                    'Good job!',
+                    'Your coupon is applied!',
+                    'success'
+                ).then(()=>{
+                     if (response.verify) {
                     document.getElementById('totalAmount').innerHTML = response.amount
                     document.getElementById("Details").hidden = false
                     document.getElementById('totalPrice').innerHTML = response.originalPrice
@@ -393,10 +446,52 @@
                         }, 3000)
                     }
                 }
+
+                })
+
+                
+               
             }
         })
     }
+    function getAddressDetails(selectedAddress){
+        $.ajax({
+            url:'/fillAddress',
+            data: {
+                addressId: selectedAddress
+            },
+             method: 'post',
+             success: (response) => {
 
+                 updateFormField(response);
+
+            }
+            
+        })
+    }
+    function updateFormFields() {
+    // Get the selected address option
+    var selectedAddress = document.getElementById("address").value;
+    console.log(selectedAddress,'oooooooooooo')
+
+    // Retrieve the corresponding address details from your data source
+    getAddressDetails(selectedAddress); // Replace with your code to fetch the address details
+    
+    // Update the form fields with the retrieved address details
+    
+}
+function updateFormField(addressDetails) {
+
+  // Update the form fields with the retrieved address details
+  document.getElementById("name").value = addressDetails.uname;
+  document.getElementById("number").value = addressDetails.number;
+  document.getElementById("email").value = addressDetails.email;
+   document.getElementById("home number").value = addressDetails.houseNumber;
+    document.getElementById("town").value = addressDetails.town;
+    document.getElementById("state").value = addressDetails.state;
+    document.getElementById("zip").value = addressDetails.pincode;
+  // Update other fields as needed
+}
 
 </script>
 

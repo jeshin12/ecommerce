@@ -123,7 +123,7 @@
                     <input class="form-control" type="file" id="formFile" name="productImage1" onchange="viewImage(event)">
                   </div>
                 </div> --}}
-                <div class="row mb-3">
+                {{!-- <div class="row mb-3">
                   
                   <label for="inputNumber" class="col-sm-2 col-form-label">Image 1: </label>
                   <img src="../product-pictures/{{product.img1}}" alt="" style="width: 70px; height:auto" id="imgView" >
@@ -147,6 +147,15 @@
                   <div class="col-sm-12">
                     <input class="form-control" type="file" id="formFile" name="productImage3" onchange="viewImage(event)">
                   </div>
+                </div> --}}
+
+                <div class="row mb-3">
+                  <label for="formFile" class="col-sm-2 col-form-label">Image Upload</label>
+                  <img src="../product-pictures/{{product.image.[0]}}" alt="" style="width: 70px; height:50px" id="imgView">
+                  <div class="col-sm-10">
+                    <input class="form-control " name="image" multiple type="file" id="formFile">
+                  </div>
+                  
                 </div>
 
 
@@ -179,4 +188,6 @@
 
 </body>
 
-<script defer src="https://cdn.crop.guide/loader/l.js?c=TVKQWZ"></script>
+
+
+<script defer src="https://cdn.crop.guide/loader/l.js?c=PNNJBK"></script>

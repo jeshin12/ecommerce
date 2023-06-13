@@ -10,9 +10,10 @@
 						<strong>THE WORLD RUNS <br> IN PEGASUS</strong>
 					</span>
 				</h1>
-				<h5 style="text-align: left; color: aliceblue; ">Oh, the miles we’ve seen. <br> This premium release features throwback <br>
-colorways and swooshes plucked from past models.</h5>
-<h5 style="text-align: left; color: aliceblue; padding-top: 200px;"></h5>
+				<h5 style="text-align: left; color: aliceblue; ">Oh, the miles we’ve seen. <br> This premium release
+					features throwback <br>
+					colorways and swooshes plucked from past models.</h5>
+				<h5 style="text-align: left; color: aliceblue; padding-top: 200px;"></h5>
 
 			</div>
 		</div>
@@ -97,10 +98,10 @@ colorways and swooshes plucked from past models.</h5>
 				{{#each products}}
 				<div class="col-lg-3 col-md-6">
 
-					<div class="single-product">
+					<div class="single-product ">
 
 						<a href="/product-detail?id={{this._id}}"><img class="img-fluid"
-								src="/product-pictures/{{this.img1}}" alt=""></a>
+								src="/product-pictures/{{this.image.[0]}}" alt=""></a>
 						<div class="product-details">
 							<h3 style="color: #ff6f00;">{{this.name}}</h3>
 							<h6>{{this.description}}</h6>
@@ -108,26 +109,42 @@ colorways and swooshes plucked from past models.</h5>
 							<h5>color:{{this.color}}</h5>
 
 
-							<div class="price">
+							{{!-- <div class="price">
 
 								<h6>₹{{this.price}}</h6>
+								<h6 style="font-size: 1.2em; padding-left: 10px;">{{this.discount}}% off</h6>
 
 							</div>
+							<h6 style="font-size: 1.4em;">₹ {{this.offerPrice}}</h6> --}}
+
+							{{!-- <div class="price">
+								<h6 class="l-through">₹{{this.price}}</h6>
+								<h6 >₹ {{this.offerPrice}} </h6>
+							</div></a> --}}
+
+							<p class="p-absoulute pr-1"><span></span> {{#if this.offerPrice}}
+								<del> ₹{{this.price}}</del>
+								₹{{this.offerPrice}}
+								{{this.discount}}% off
+								{{else}}
+								₹{{this.price}}
+								{{/if}}<span></span>
 
 
 
 
 							<div class="prd-bottom">
 
-
-								{{!-- <a class="social-info" href="/add-to-cart/{{this._id}}">
-									<span class="ti-bag"></span>
-									<p class="hover-text">Add To Cart</p>
-								</a> --}}
+								{{#if this.stock }}
 								<a class="social-info" href="/add-to-cart/{{this._id}}">
 									<span class="ti-bag"></span>
 									<p class="hover-text">Add To Cart</p>
 								</a>
+								{{else}}
+
+								<h6 style="color: #ff6f00;" class="hover-text">out of stock</h6>
+								</a>
+								{{/if}}
 								{{!-- <a href="/add-to-wishlist/{{this._id}}" class="social-info">
 									<span class="lnr lnr-heart"></span>
 									<p class="hover-text">Wishlist</p>
@@ -160,7 +177,7 @@ colorways and swooshes plucked from past models.</h5>
 				{{/each}}
 			</div>
 
-{{!-- 
+			{{!--
 			<nav aria-label="Page navigation example">
 				<ul class="pagination justify-content-center mb-5">
 					<li class="page-item">
@@ -179,24 +196,25 @@ colorways and swooshes plucked from past models.</h5>
 					</li>
 				</ul>
 			</nav> --}}
-				<nav aria-label="Page navigation example">
-		<ul class="pagination">
-			<li class="page-item">
-				<a class="page-link" href="#" aria-label="Previous">
-					<span aria-hidden="true">&laquo;</span>
-				</a>
-			</li>
-			{{#for 1 pages 1}}
-			 <li class="page-item "><a class="page-link {{#ifCond this ../currentPage}} active {{/ifCond}}" href="/?page={{this}}">{{this}}</a></li>
-			{{/for}}
+			<nav aria-label="Page navigation example">
+				<ul class="pagination">
+					<li class="page-item">
+						<a class="page-link" href="#" aria-label="Previous">
+							<span aria-hidden="true">&laquo;</span>
+						</a>
+					</li>
+					{{#for 1 pages 1}}
+					<li class="page-item "><a class="page-link {{#ifCond this ../currentPage}} active {{/ifCond}}"
+							href="/?page={{this}}">{{this}}</a></li>
+					{{/for}}
 
-			<li class="page-item">
-				<a class="page-link" href="#" aria-label="Next">
-					<span aria-hidden="true">&raquo;</span>
-				</a>
-			</li>
-		</ul>
-	</nav><br>
+					<li class="page-item">
+						<a class="page-link" href="#" aria-label="Next">
+							<span aria-hidden="true">&raquo;</span>
+						</a>
+					</li>
+				</ul>
+			</nav><br>
 
 
 

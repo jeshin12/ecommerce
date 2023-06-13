@@ -10,7 +10,7 @@ const { resolve } = require('path');
 module.exports={
 
     addProduct: (product) => {
-        console.log(product);
+        
         product.price = parseInt(product.price);
         return new Promise((resolve, reject) => {
 
@@ -67,9 +67,8 @@ module.exports={
                     price:proDetails.price,
                     color:proDetails.color,
                     description: proDetails.description,
-                    img1: proDetails.img1,
-                    img2 : proDetails.img2,
-                    img3 : proDetails.img3
+                    image:proDetails.image
+                   
                    
                 }
             }).then((response)=>{
@@ -165,9 +164,81 @@ module.exports={
                 }
 
             ]).toArray()
-            console.log(orderProduct,'llllllllllllll');
+           
             resolve(orderProduct)
         })
+    },
+
+    editStock : ((prodId , details) => {
+        
+        return new Promise((resolve , reject) => {
+            db.get().collection(collection.PRODUCT_COLLECTION).updateOne({_id : ObjectId(prodId)} , {$set : {stock : details.stock}}).then((response) => {
+                resolve()
+            })           
+        })
+    }),
+
+    updateStock : (prodId , quantity) => {
+        console.log(prodId,'>>>>>>>>>>><<<<<<<<<<');
+        console.log(quantity,'quantityyyyyyyyyyy');
+        return new Promise((resolve , reject) => {
+            db.get().collection(collection.PRODUCT_COLLECTION).updateOne({_id : objectId(prodId)} , {$inc : {stock : -quantity}})
+            resolve()
+        })
+    },
+
+    cancelStockUpdate : (prodId , quantity) => {
+        return new Promise((resolve , reject) => {
+            db.get().collection(collection.PRODUCT_COLLECTION).updateOne({_id : ObjectId(prodId)} , {$inc : {stock : quantity}})
+            resolve()
+        })
+    },
+
+
+    
+    addProductOffer: (details, prodId, code) => {
+        return new Promise(async (resolve, reject) => {
+            let response = {}
+            let prodIdExist = await db.get().collection(collection.PRODUCT_OFFER).findOne({ prodId: prodId })
+            if (prodIdExist) {
+                db.get().collection(collection.PRODUCT_OFFER).updateOne({prodId : prodId},{
+                    $set: {
+                        discount: details.discount,
+                        startDate: details.startdate,
+                        endDate: details.endingdate,
+                    }
+                }).then((response) => {
+                    resolve(response)
+                })
+            }
+            else {
+                db.get().collection(collection.PRODUCT_OFFER).insertOne(
+                    {
+                        prodId: prodId,
+                        code: code,
+                        discount: details.discount,
+                        startDate: details.startdate,
+                        endDate: details.endingdate,
+                        status: true
+                    }
+                ).then((response) => {
+                    resolve(response)
+                })
+            }
+
+        })
+    },
+
+    addOfferPrice : async (data , product) => {
+        let price = product.price
+        let discount = data.discount
+        let prodId = product._id
+        const response = await new Promise((resolve, reject) => {
+            let offerPriceInt = Math.floor(price - (price * discount) / 100);
+            let offerPrice = offerPriceInt.toString();
+            db.get().collection(collection.PRODUCT_COLLECTION).updateOne({ _id: objectId(prodId) }, { $set: { offerPrice: offerPrice, discount: discount } });
+        });
+        resolve(response);
     },
     
    

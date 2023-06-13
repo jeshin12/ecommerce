@@ -129,7 +129,9 @@
   </main><!-- End #main -->
 
 
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+ 
+  <script src="/helpers/admin-helpers.js"></script>
+
 
 
   <script>
@@ -161,37 +163,10 @@
     }
 
 
-
-    
-
-    $(document).ready(function () {
-        var t = $('#orderTable').DataTable({
-            columnDefs: [
-                {
-                    searchable: false,
-                    orderable: false,
-                    targets: 0,
-                },
-            ],
-            order: [[1, 'asc']],
-        });
-
-        t.on('order.dt search.dt', function () {
-            let i = 1;
-
-            t.cells(null, 0, { search: 'applied', order: 'applied' }).every(function (cell) {
-                this.data(i++);
-            });
-        }).draw();
-    });
-
-
    
 
 
- $(document).ready(function () {
-            $('#orderTable').DataTable()
-        });
+
 
 
 
@@ -215,6 +190,32 @@
   }
 </style>
 
-  
+<script>
+
+   
+    $(document).ready(function () {
+        var t = $('#orderTable').DataTable({
+            columnDefs: [
+                {
+                    searchable: false,
+                    orderable: false,
+                    targets: 0,
+                },
+            ],
+            order: [[1, 'asc']],
+        });
+
+        t.on('order.dt search.dt', function () {
+            let i = 1;
+
+            t.cells(null, 0, { search: 'applied', order: 'applied' }).every(function (cell) {
+                this.data(i++);
+            });
+        }).draw();
+    });
+
+</script>
+
+   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
        
     

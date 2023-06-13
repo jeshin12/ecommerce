@@ -2,9 +2,11 @@ const { log } = require("console")
 const { response } = require('express');
 const { doSignup, dologin, getUserDetails, doOtp, otpConfirm, getPricefilter, viewTotalProduct, AddtoCart, getCartproduct, getCartCount, changeProductQuantity, deleteFromCart,
     getTotalAmount, placeorder, getCartProductList, addToWishlist, getWishlistId, getWishlistProduct, deleteFromWishlist,
-    getUserorders, editAddress, getAllorder, getOrderProducts, generateRazorpay, verifyRazorPayment, changePaymentStatus, getAllOffers,
-    applyCoupen } = require("../helpers/user-helpers")
+    getUserorders, getAllorder, getOrderProducts, generateRazorpay, verifyRazorPayment, changePaymentStatus, getAllOffers,
+    applyCoupen,orderCancel,getProductDetails,returnOrder,getOtp,changepassword,addAddress,getAddress,getOneAddressById,userImage} = require("../helpers/user-helpers")
 var productHelpers = require("../helpers/product-helpers");
+var orderHelpers=require('../helpers/order-helpers')
+const walletHelpers = require("../helpers/wallet-helpers")
 const session = require("express-session");
 var Handlebars = require('handlebars');
 
@@ -16,7 +18,7 @@ module.exports = {
     loginPage(req, res) {
         if (req.session.loggedIn) {
 
-            console.log("callingggggggggggggggggggggggggggggggg");
+           
             res.redirect('/')
         } else {
 
@@ -148,8 +150,9 @@ module.exports = {
                     }
 
 
-
-                    console.log(pages, "pppppppppprrrrrrrrroooooooooodddddddduuuuuuuuuuuucccccccccctttttt");
+                    // let stock=products.stock
+                    // console.log(stock,'stockkkkkkkkkkkkk');
+                    // console.log(products, "pppppppppprrrrrrrrroooooooooodddddddduuuuuuuuuuuucccccccccctttttt");
                     res.render('user/homepage', { user: true, logged: true, userData: user, products, categories, totalDoc: productCount, currentPage: pageNum, pages: pages, cartCount })
 
                 })
@@ -170,10 +173,12 @@ module.exports = {
 
 
 
-    signupSubmit(req, res) {
+   async signupSubmit(req, res) {
+
         if (req.body.password === req.body.repassword) {
             delete req.body.repassword
-
+            let data = req.body
+            await walletHelpers.CREATE_WALLET(data)
             doSignup(req.body).then((userData) => {
                 console.log(userData);
                 req.session.loggedIn = true;
@@ -208,7 +213,7 @@ module.exports = {
 
     //------------single Product view---------
 
-    clickProduct(req, res) {
+     clickProduct(req, res) {
         let user = req.session.users
         console.log(req.body.id);
         productHelpers.viewProduct(req.body.id).then((product) => {
@@ -295,20 +300,16 @@ module.exports = {
 
     //------------user profile---------
 
-    // userprofile: async (req, res) => {
-
-
-    //     let usere = await getUserDetails(req.session.users._id)
-    //     console.log(usere);
-    //     res.render('user/userprofile', { user: true, usere, userData: usere })
-    // },
+   
 
     userprofile: async (req, res) => {
 
 
         let usere = await getUserDetails(req.session.users._id)
+        console.log(usere,'usereeeeeeeeeeeeeeeeeeeeeeeee');
 
-        res.render('user/userprofile', { user: true, usere, userData: usere })
+        res.render('user/userprofile', { user: true, usere, userData: usere,passChangeSuccess: req.flash('updateStatusSuccess'),
+        passChangeFail: req.flash('updateStatusFail') })
     },
 
     orderInfo: async (req, res) => {
@@ -334,17 +335,17 @@ module.exports = {
     // },
 
     
-    usereditprofile: (req, res) => {
-        console.log(req.body,'halooooo');
-        let user=req.body._id
+    // usereditprofile: (req, res) => {
+    //     console.log(req.body,'halooooo');
+    //     let user=req.body._id
        
-        editAddress(req.body).then((response) => {
-            //when we using ajax we only doing passing data in the json format
-            console.log(response, "response of update")
-            res.json(response)
-        })
+    //     editAddress(req.body).then((response) => {
+    //         //when we using ajax we only doing passing data in the json format
+    //         console.log(response, "response of update")
+    //         res.json(response)
+    //     })
 
-    },
+    // },
 
     userOrderAddress: async (req, res) => {
 
@@ -465,27 +466,85 @@ module.exports = {
 
 
 
-    proceedtocheckout: (async (req, res) => {
-        let user = req.session.users
-        let products = await getCartproduct(req.session.users._id)
-        let total = await getTotalAmount(req.session.users._id)
-        res.render('user/checkout', { total, products, user, userData: user })
+    // proceedtocheckout: (async (req, res) => {
+    //     let user = req.session.users
+    //     let products = await getCartproduct(req.session.users._id)
+    //     let total = await getTotalAmount(req.session.users._id)
+    //     let coupen =await getAllOffers(req.session.users._id)
+    //     res.render('user/checkout', { total, products, user, userData: user ,coupen})
 
-    }),
+    // }),
+
+    async proceedtocheckout(req, res) {
+        let user = req.session.users
+        try {
+            let products = await getCartproduct(req.session.users._id)
+            let coupen =await getAllOffers(req.session.users._id)
+            let address = await getAddress(req.session.users._id);
+            // let address = await userHelpers.getAddress(req.session.user._id);
+
+
+            let flag = false;
+            for (let i = 0; i < products.length; i++) {
+                if (products[i].product && products[i].quantity > products[i].product.stock) {
+                    flag = true;
+                    break;
+                }
+            }
+
+            if (flag) {
+                req.session.stockFull = true;
+                res.redirect('/cart');
+            } else {
+                // let total = await getTotalAmount(req.session.users._id);
+             let total=req.session.amount
+
+                res.render('user/checkout', { user, total, products,coupen,userData: user,address });
+            }
+        } catch (error) {
+            res.render('user/checkout', { user });
+        }
+    },
 
     placeOrder: (async (req, res) => {
 
         let products = await getCartProductList(req.session.users._id)
-        let totalprice = await getTotalAmount(req.session.users._id)
-        placeorder(req.body, products, totalprice).then((orderId) => {
+        // let totalprice = await getTotalAmount(req.session.users._id)
+        let totalprice=req.session.amount
+
+        console.log(products,'productsssssssssssss');
+
+        placeorder(req.body, products, totalprice).then(async (orderId) => {
+            for (let i = 0; i < products.length; i++) {
+                await productHelpers.updateStock(products[i].item, products[i].quantity)
+            }
+
             if (req.body['payment-method'] == 'COD') {
                 res.json({ Success: true })
-            } else if (req.body['payment-method'] == "RAZORPAY") {
+            }
+            
+            else if (req.body['payment-method'] == "RAZORPAY") {
 
                 generateRazorpay(orderId, totalprice).then((response) => {
 
                     res.json(response)
                 })
+            } 
+            
+            else if (req.body['payment-method'] == "WALLET") {
+                walletHelpers.WALLET_BALANCE(req.session.users.email).then((result) => {
+                    console.log(result,'resulttttttttttttttttttttttttttttttttt');
+                    if (result.balance < totalprice) {
+                        res.json({ walletSuccess: false })
+                    } else {
+                        orderHelpers.updatePaymentMethod(orderId, req.body['payment-method'])
+                        orderHelpers.CHANGE_STATUS(orderId, (state = "placed"))
+                    console.log(req.session.users.email,'req.session.users.emailllllllll');
+                        walletHelpers.UPDATE_WALLET(req.session.users.email, -totalprice)
+                        res.json({ walletSuccess: true })
+                    }
+                })
+
             }
 
 
@@ -556,10 +615,16 @@ module.exports = {
     viewOrderProducts: (async (req, res) => {
         let user = req.session.users
         console.log(req.params.id, "req.params.idaaaaaaaaaaaaaaaaa");
-        let orderProducts = await getOrderProducts(req.params.id)
+        await getOrderProducts(req.params.id).then((orderProducts)=>{
+            console.log(orderProducts,'orderProductssssssssssss');
 
-        console.log(orderProducts, "oderproductsssssssssssssssss");
+       
         res.render('user/view-order-products', { user, orderProducts, userData: user })
+
+        }).catch((err)=>{
+            console.log(err, "this is error");
+        })
+        
 
     }),
 
@@ -657,6 +722,172 @@ module.exports = {
         }
     }),
 
+
+    placedOrderCancel: (async (req, res) => {
+        let ordId = req.params.id
+        console.log(ordId,'ordIddddddddddddd');
+        console.log(req.body,'bodyyyyyyyyyyyyyyy reaaaaaaaaa');
+        let reason = await orderHelpers.reasonUpdate(req.body.reason, ordId)
+       
+        let ordCancel = await orderCancel(ordId)
+        console.log(ordCancel,'ordCancel');
+        let singleOrder = await orderHelpers.getStatusDetails(ordId)
+        console.log("111111111111111111111",singleOrder,'singleOrder');
+        let orderProduct = await getProductDetails(ordId)
+        let status = singleOrder.status
+        
+
+        if (status === 'order cancelled') {
+            for (let i = 0; i < orderProduct.length; i++) {
+                await productHelpers.cancelStockUpdate(orderProduct[i].item, orderProduct[i].quantity)
+            }
+            let orderDetails = await orderHelpers.getOneOrder(ordId)
+            console.log(orderDetails,'orderDetailsssssssssssssss');
+            let totalAmount = orderDetails.totalAmount
+            if (orderDetails.status !== 'pending') {
+                if (orderDetails.paymentMethod !== 'COD') {
+
+                    walletHelpers.UPDATE_WALLET(singleOrder.deliveryDetails.email, totalAmount)
+
+                }
+            }
+            
+        }
+        res.json({ status: true })
+    }),
+
+    returnOrder: (async (req, res) => {
+        let ordId = req.params.id
+        let orderReturm = returnOrder(ordId)
+        let returnReason = await orderHelpers.returnReason(req.body.returnReason, ordId)
+        let oneOrder = await orderHelpers.getStatusDetails(ordId)
+        let orderProducts = await getProductDetails(ordId)
+        let status = oneOrder.status
+
+        if (status === 'product returned') {
+            for (let i = 0; i < orderProducts.length; i++) {
+                await productHelpers.cancelStockUpdate(orderProducts[i].item, orderProducts[i].quantity)
+            }
+            let oneOrderDetails = await orderHelpers.getOneOrder(ordId)
+            let totalAmount = oneOrderDetails.total
+            if (oneOrderDetails.status !== 'pending') {
+                if (oneOrderDetails.paymentMethod !== 'COD') {
+                    console.log('ivn ivideee ethi');
+                    walletHelpers.UPDATE_WALLET(oneOrder.emailId, totalAmount)
+                }
+            }
+            
+        }
+        res.json({ status: true })
+    }),
+
+    forgotpassword(req, res) {
+        let user = req.session.users._id
+        res.render('user/forgetpassword',{user, userData: user})
+      },
+
+      mobileNumberSubmit: ((req, res) => {
+        getOtp(req.body).then((response) => {
+            if (response.status) {
+                signupData = response.user
+                res.render('user/newPassword')
+            }
+            else {
+                res.render('user/forgetpassword', { error: 'invalid mobile number' })
+            }
+
+        })
+    }),
+
+    newPasswordSubmit: (req, res) => {
+
+        changePassword(req.body, signupData).then((response) => {
+            if (response.status) {
+                req.session.loggedIn = true;
+                req.session.user = signupData;
+                console.log(signupData,'oooooooooooooooooooo');
+                res.redirect('/login');
+            } else {
+                res.render('user/newPassword', { error: 'Password not changed' });
+            }
+        })
+            .catch(error => {
+                res.render('user/newPassword', { error: 'An error occurred while changing password' });
+            });
+    },
+
+
+    submitAddress(req, res) {
+        let user = req.session.users._id
+        addAddress(req.body, user).then(() => {
+            res.redirect('/userprofile')
+        })
+    },
+
+    async fillAddress(req, res) {
+        let userAddressId = req.body.addressId
+        console.log(req.body,'userAddressId');
+
+        if (userAddressId != "select") {
+            let getOneAddress = await getOneAddressById(req.session.users._id, userAddressId)
+            console.log(getOneAddress.Address,"aaaaaaaaaaaaaaa");
+
+            let response = getOneAddress.Address
+            response.status = true
+            res.json(response)
+        }
+        else {
+            res.json({ status: false })
+        }
+    },
+
+    changePassword:(async(req,res)=>{
+        console.log(req.body,'333333333333333333');
+        changepassword(req.body).then(() => {
+            
+            req.flash('updateStatusSuccess', 'Sussessfully updated')
+            res.redirect('/userprofile')
+          }).catch(() => {
+            req.flash('updateStatusFail', 'Password cannot be matched')
+            res.redirect('/userprofile')
+          })
+
+    }),
+
+
+    wallet: async (req, res) => {
+        try {
+            const user = req.session.users;
+            const userId = req.session.users._id;
+            const orderDetails = await walletHelpers.GET_ORDER_WALLET(user.email, 'WALLET');
+            if (!orderDetails) {
+                throw new Error('No order details found');
+            }
+            const order = JSON.parse(JSON.stringify(orderDetails));
+            const data = await walletHelpers.GET_WALLET(user.email);
+            let walletData = await walletHelpers.WALLET_BALANCE(user.email)
+            res.render('user/wallet', { userId,user, userData: user, order, data, walletData });
+        } catch (error) {
+            console.log(error);
+            res.status(500).send('Internal Server Error');
+        }
+    },
+
+    uploaduserImage: async (req, res) => {
+       
+            let user = req.session.users._id
+          const imageFile = req.files[0]; // Access the first uploaded file
+          req.body.imageuser = imageFile;
+          console.log(req.body, 'uploaded image');
+          // Process the uploaded image as needed
+          await userImage(req.body,user).then((response) => {
+            console.log(response,'responseeeeeeeeeeee');
+            res.redirect('/userprofile')
+        })
+        
+      }
+
+    
 
 
 

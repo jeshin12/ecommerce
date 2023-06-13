@@ -58,7 +58,7 @@
                 <tbody>
                     {{#each product}}
                   <tr>
-                    <th scope="row">{{ @index}}</th>
+                   <td></td>
                     <td>{{this.name}}</td>
                       <td>{{this.size}}</td>
                        <td>{{this.categoryid}}</td>
@@ -66,7 +66,7 @@
                     <td>{{this.price}}</td>
                     <td>{{this.description}}</td>
                     {{!-- <td><img src="/product-images/{{this._id}}.jpg" alt="" style="width: 70px; height:auto"> </td> --}}
-                     <td><img src="../product-pictures/{{this.img1}}" alt="" style="width: 70px; height:auto"> </td>
+                     <td><img src="../product-pictures/{{this.image.[0]}}" alt="" style="width: 40px; height: 40px"> </td>
                      
                     <td>
                         <form action="/admin/edit-product" method="post">
@@ -112,9 +112,33 @@
 
 </html>
 
-<script>
+{{!-- <script>
   $(document).ready(function() {
     $('#productsTable').DataTable();
+  });
+</script> --}}
+
+<script>
+  
+  $(document).ready(function () {
+    var t = $('#productsTable').DataTable({
+      columnDefs: [
+        {
+          searchable: false,
+          orderable: false,
+          targets: 0,
+        },
+      ],
+      order: [[1, 'asc']],
+    });
+
+    t.on('order.dt search.dt', function () {
+      let i = 1;
+
+      t.cells(null, 0, { search: 'applied', order: 'applied' }).every(function (cell) {
+        this.data(i++);
+      });
+    }).draw();
   });
 </script>
 

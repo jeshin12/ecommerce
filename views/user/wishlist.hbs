@@ -1,3 +1,5 @@
+
+{{#if products}}
 <section class="cart_area">
     <div class="container">
         <div class="cart_inner">
@@ -27,7 +29,7 @@
                                 <div class="media">
                                     <div class="col-md-2 col-lg-2 col-xl-2">
                                     
-                                        <img src="/product-pictures/{{this.product.img1}}" class="img-fluid rounded-3" alt="Cotton T-shirt">
+                                        <img src="/product-pictures/{{this.product.image.[0]}}" class="img-fluid rounded-3" alt="Cotton T-shirt">
                                     
                                     </div>
                                     <div class="media-body">
@@ -58,6 +60,11 @@
         </div>
     </div>
 </section>
+{{else}}
+ <h3 class="text-center mt-5 mb-5">No Items In Cart</h3>
+        <h6 class="text-center mt-3 mb-4"><a href="/" class="text-body"><i class="fas fa-long-arrow-alt-left mr-2"></i>Back
+                                to shop</a></h6>
+{{/if}}
 <!--================End Cart Area =================-->
 
 <script>

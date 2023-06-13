@@ -1,3 +1,6 @@
+
+
+
 <body>
 
   <!-- ======= Header ======= -->
@@ -193,7 +196,7 @@
                   <script>
                     document.addEventListener("DOMContentLoaded", () => {
                       new ApexCharts(document.querySelector("#pieChart"), {
-                        series: [{{ data.PAYPAL }}, {{ data.COD }}, {{ data.RAZORPAY }} , {{ data.WALLET }}],
+                        series: [ {{ data.COD }}, {{ data.RAZORPAY }} ],
                       chart: {
                       height: 350,
                       type: 'pie',
@@ -201,7 +204,7 @@
                         show: true
                       }
                     },
-                      labels: ['PAYPAL', 'COD', 'RAZORPAY', 'WALLET']
+                      labels: [ 'COD', 'RAZORPAY']
                   }).render();
                 });
                   </script>
@@ -229,7 +232,7 @@
             <div class="col-lg-12" id="invoiceGraph">
               <div class="card">
                 <div class="card-body">
-                  <button type="button" class="btn btn-success" style="margin-left: 1000px; margin-top: 10px;"
+                  <button type="button" class="btn btn-success" style="margin-left: 960px; margin-top: 20px;"
                     onclick="exportToPDF()">Download</button>
                   <h5 class="card-title">Order Status</h5>
                   <!-- Donut Chart -->
@@ -264,14 +267,14 @@
             <div class="col-12">
               <div class="card recent-sales overflow-auto">
                 <div class="card-body">
-                  <button type="button" class="btn btn-success" style="margin-left: 1000px; margin-top: 10px;"
+                  <button type="button" class="btn btn-success" style="margin-left: 960px; margin-top: 20px;"
                     onclick="generatePDF()">Download</button>
                   <h5 class="card-title">Yearly Sales <span></span></h5>
                   <table class="table table-borderless datatable" id="invoice">
                     <thead>
                       <tr>
                         <th scope="col">No.</th>
-                        <th scope="col">Date</th>
+                        <th scope="col">year</th>
                         <th scope="col">Total Sales</th>
                         <th scope="col">Total Revenue</th>
                       </tr>
@@ -306,7 +309,7 @@
             <div class="col-12">
               <div class="card recent-sales overflow-auto">
                 <div class="card-body">
-                  <button type="button" class="btn btn-success" style="margin-left: 1000px; margin-top: 10px;"
+                  <button type="button" class="btn btn-success" style="margin-left: 960px; margin-top: 20px;"
                     onclick="exportToPDF()">Download</button>
                   <h5 class="card-title">Daily Sales <span></span></h5>
                   <table class="table table-borderless datatable" id="invoice2">
@@ -348,14 +351,14 @@
             <div class="col-12" id="invoice">
               <div class="card recent-sales overflow-auto">
                 <div class="card-body">
-                  <button type="button" class="btn btn-success" style="margin-left: 1000px; margin-top: 10px;"
+                  <button type="button" class="btn btn-success" style="margin-left: 960px; margin-top: 20px;"
                     onclick="exportsToPDF()">Download</button>
                   <h5 class="card-title">Weekly Sales <span></span></h5>
                   <table class="table table-borderless datatable" id="invoice3">
                     <thead>
                       <tr>
                         <th scope="col">No.</th>
-                        <th scope="col">Date</th>
+                        <th scope="col">week</th>
                         <th scope="col">Total Sales</th>
                         <th scope="col">Total Revenue</th>
                       </tr>

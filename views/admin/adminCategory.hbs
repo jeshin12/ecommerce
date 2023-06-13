@@ -53,7 +53,7 @@
                 <tbody>
                     {{#each getcategory}}
                   <tr>
-                    <th scope="row">{{@index}}</th>
+                    <td></td>
                     <td>{{this.name}}</td>
                     <td>{{this.description}}</td>
                     <td>
@@ -101,9 +101,27 @@
 
 </html>
 
-<script>
-  $(document).ready(function() {
-    $('#mycategory').DataTable();
+
+  <script>
+  $(document).ready(function () {
+    var t = $('#mycategory').DataTable({
+      columnDefs: [
+        {
+          searchable: false,
+          orderable: false,
+          targets: 0,
+        },
+      ],
+      order: [[1, 'asc']],
+    });
+
+    t.on('order.dt search.dt', function () {
+      let i = 1;
+
+      t.cells(null, 0, { search: 'applied', order: 'applied' }).every(function (cell) {
+        this.data(i++);
+      });
+    }).draw();
   });
 </script>
 

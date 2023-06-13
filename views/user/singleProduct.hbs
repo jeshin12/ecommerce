@@ -25,14 +25,14 @@
 					<div class="s_Product_carousel">
                        
 						<div id="container1" class="single-prd-item">
-							<img  class="img-fluid" src="/product-pictures/{{product.img1}}" alt="">
+							<img  class="img-fluid" src="/product-pictures/{{product.image.[0]}}" alt="">
 						</div>
                         
 						<div id="container2" class="single-prd-item">
-							<img  class="img-fluid" src="/product-pictures/{{product.img2}}" alt="">
+							<img  class="img-fluid" src="/product-pictures/{{product.image.[1]}}" alt="">
 						</div>
 						<div id="container3" class="single-prd-item">
-							<img class="img-fluid" src="/product-pictures/{{product.img3}}" alt="">
+							<img class="img-fluid" src="/product-pictures/{{product.image.[2]}}" alt="">
 						</div>
 					</div>
 				</div>
@@ -42,7 +42,17 @@
                         <h5>size: {{product.size}}</h5>
 							<h5>color: {{product.color}}</h5>
 
-						<h2>₹ {{product.price}}.00</h2>
+						{{!-- <h2>₹ {{product.price}}.00</h2> --}}
+                        <div class="s-price pt-30 mb-30">
+                            {{#if product.offerPrice}}
+                            <del>
+                                <h4>₹{{product.price}}</h4>
+                            </del>
+                            <span>₹{{product.offerPrice}}</span>
+                            {{else}}
+                            <span>₹{{product.price}}</span>
+                            {{/if}}
+                        </div>
 						<ul class="list">
 							<li><a class="active" href="#"><span>Category</span> : {{product.categoryid}}</a></li>
 							<li><a href="#"><span>Availibility</span> : In Stock</a></li>

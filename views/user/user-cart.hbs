@@ -1,8 +1,11 @@
+
+
 <section class=" h-custom" style="background-color: #f7861d;">
   <div class="container py-5 h-100">
     <div class="row d-flex justify-content-center align-items-center h-100">
       <div class="col-12">
         <div class="card card-registration card-registration-2" style="border-radius: 15px;">
+           {{#if products}}
           <div class="card-body p-0">
             <div class="row g-0">
               <div class="col-lg-8">
@@ -23,7 +26,7 @@
 
                     <div class="col-md-2 col-lg-2 col-xl-2">
 
-                      <img src="/product-pictures/{{this.product.img1}}" class="img-fluid rounded-3"
+                      <img src="/product-pictures/{{this.product.image.[0]}}" class="img-fluid rounded-3"
                         alt="Cotton T-shirt">
 
                     </div>
@@ -33,25 +36,44 @@
                       <h6 class="text-black mb-0">{{this.product.categoryid}}</h6>
                     </div>
 
-                    <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
+                    {{!-- <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
                       <h6 class="mb-0">₹{{this.product.price}}</h6>
-                    </div>
+                    </div> --}}
+
+                    <div class="s-price pt-30 mb-30">
+                  {{#if product.offerPrice}}
+                            {{!-- <del><h4>₹{{product.price}}</h4></del> --}}
+                            <span>₹{{product.offerPrice}}</span>
+                            {{else}}
+                             <span>₹{{product.price}}</span>
+                            {{/if}}
+              </div>
 
 
 
 
 
-                    <td>
-
-
-
+                    {{!-- <td>
                       <button class="btn btn-info mr-3"
                         onclick="changeQuantity('{{this._id}}','{{this.product._id}}','{{../user._id}}', -1 , '{{this.product.price}}' )">-</button>
                       <span id="{{this.product._id}}">{{this.quantity}}</span>
                       <button class="btn btn-info ml-3"
                         onclick="changeQuantity('{{this._id}}','{{this.product._id}}','{{../user._id}}', 1, '{{this.product.price}}' )">+</button>
 
+                    </td> --}}
+
+                   
+                  
+                    <td>
+                      <button class="btn btn-info mr-3"
+                        onclick="changeQuantity('{{this._id}}','{{this.product._id}}','{{../user._id}}', -1 , '{{this.product.price}}' )">-</button>
+                      <span id="{{this.product._id}}">{{this.quantity}}</span>
+                     
+                      <button class="btn btn-info ml-3"
+                        onclick="changeQuantity('{{this._id}}','{{this.product._id}}','{{../user._id}}', 1, '{{this.product.price}}' )">+</button>
+
                     </td>
+                   
 
 
                     <td>
@@ -116,11 +138,17 @@
               </div>
             </div>
           </div>
+           {{else}}
+        <h3 class="text-center mt-5 mb-5">No Items In Cart</h3>
+        <h6 class="text-center mt-3 mb-4"><a href="/" class="text-body"><i class="fas fa-long-arrow-alt-left mr-2"></i>Back
+                                to shop</a></h6>
+        {{/if}}
         </div>
       </div>
     </div>
   </div>
 </section>
+
 <script>
 
 
@@ -143,7 +171,7 @@
         success: (response) => {
           console.log(response, "this")
           if (response.removeProduct) {
-            swal("Product remove form the cart!", '', "error").then(() => {
+            Swal.fire("Product remove form the cart!", '', "error").then(() => {
               location.reload()
             })
           }
@@ -168,7 +196,7 @@
       method: 'post',
       success: (response) => {
         if (response.removeProduct) {
-          swal(" Remove product form the cart!", '', "error").then(() => {
+          Swal.fire(" Remove product form the cart!", '', "error").then(() => {
             location.reload()
           })
         }
