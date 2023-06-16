@@ -667,7 +667,7 @@ changeProductQuantity: (details) => {
                 },
                 userId: objectId(order.userId),
                 paymentMethod: order['payment-method'],
-                totalAmount:total,
+                totalAmount:parseInt(total),
                 products: products,
                 date: moment().format('Do MMM  YY, hh:mm a'),
                 created: new Date(Date.now()),

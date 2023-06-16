@@ -10,6 +10,13 @@ const walletHelpers = require("../helpers/wallet-helpers")
 const session = require("express-session");
 var Handlebars = require('handlebars');
 
+  Handlebars.registerHelper('for', function (from, to, incr, block) {
+    var accum = '';
+    for (var i = from; i <= to; i += incr)
+        accum += block.fn(i);
+    return accum;
+});
+
 
 module.exports = {
 
@@ -496,8 +503,9 @@ module.exports = {
                 req.session.stockFull = true;
                 res.redirect('/cart');
             } else {
-                // let total = await getTotalAmount(req.session.users._id);
-             let total=req.session.amount
+                
+                let total = await getTotalAmount(req.session.users._id);
+            //  let total=req.session.amount
 
                 res.render('user/checkout', { user, total, products,coupen,userData: user,address });
             }
@@ -510,7 +518,10 @@ module.exports = {
 
         let products = await getCartProductList(req.session.users._id)
         // let totalprice = await getTotalAmount(req.session.users._id)
-        let totalprice=req.session.amount
+        let totalprice =req.body.totalprice;
+        console.log(req.body,'bodyyyyyyyyyyy reqqqqqq');
+       
+        // let totalprice=req.session.amount
 
         console.log(products,'productsssssssssssss');
 

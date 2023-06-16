@@ -1,6 +1,7 @@
 const { getUserDetails } = require('../helpers/user-helpers')
 var productHelpers = require("../helpers/product-helpers");
 
+
 module.exports = {
     sessionCheck: (req, res, next) => {
 
@@ -20,6 +21,7 @@ module.exports = {
         } else {
 
             productHelpers.getAllproduct().then((product) => {
+                
                 
                 res.render('user/landingPage', { logged: false,product})
 

@@ -93,15 +93,23 @@
 
 
 			<div class="row">
+				
 
 				<!-- single product -->
 				{{#each products}}
 				<div class="col-lg-3 col-md-6">
-
+				
 					<div class="single-product ">
-
-						<a href="/product-detail?id={{this._id}}"><img class="img-fluid"
-								src="/product-pictures/{{this.image.[0]}}" alt=""></a>
+						
+						<div class="position-relative ">
+							
+							<a  href="/product-detail?id={{this._id}}">
+								{{#if this.offerPrice}}<div class="ml-2"><button class="btn btn-warning position-absolute pt-4  " ><div style="font-weight: 700;">{{this.discount}}% </div><br>Offer</button></div>{{/if}}
+								<img class="img-fluid" src="/product-pictures/{{this.image.[0]}}" alt="">
+						
+							</a>
+							
+						</div>
 						<div class="product-details">
 							<h3 style="color: #ff6f00;">{{this.name}}</h3>
 							<h6>{{this.description}}</h6>
@@ -109,23 +117,12 @@
 							<h5>color:{{this.color}}</h5>
 
 
-							{{!-- <div class="price">
-
-								<h6>₹{{this.price}}</h6>
-								<h6 style="font-size: 1.2em; padding-left: 10px;">{{this.discount}}% off</h6>
-
-							</div>
-							<h6 style="font-size: 1.4em;">₹ {{this.offerPrice}}</h6> --}}
-
-							{{!-- <div class="price">
-								<h6 class="l-through">₹{{this.price}}</h6>
-								<h6 >₹ {{this.offerPrice}} </h6>
-							</div></a> --}}
+							
 
 							<p class="p-absoulute pr-1"><span></span> {{#if this.offerPrice}}
 								<del> ₹{{this.price}}</del>
 								₹{{this.offerPrice}}
-								{{this.discount}}% off
+								{{!-- {{this.discount}}% off --}}
 								{{else}}
 								₹{{this.price}}
 								{{/if}}<span></span>
@@ -173,8 +170,11 @@
 							</div>
 						</div>
 					</div>
+					
 				</div>
+				
 				{{/each}}
+				
 			</div>
 
 			{{!--

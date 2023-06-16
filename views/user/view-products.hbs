@@ -1,5 +1,6 @@
 <script src="/javascripts/js/vendor/jquery-2.2.4.min.js"></script>
 <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
 <div class="container mt-5 mb-5">
     <div class="container">
         <div class="row">
@@ -41,24 +42,113 @@
 
             <div class="row justify-content-center">
                 <div class="col-lg-6 text-center">
-                    <div class="section-title">
-                        <h1 style="color: #ff6f00;font-weight: bolder;">{{products.[0].categoryid}}</h1>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-                            labore
-                            et
-                            dolore
-                            magna aliqua.</p>
+                    <div class="section-title ">
+                        {{#if products}}
+                       
+                            <h1 style="color: #ff6f00;font-weight: bolder; " >{{products.[0].categoryid}}</h1>
+                       
+                        
+                        {{else}}
+                       <h1 class="text-center mt-5 mb-5">No Items In Cart</h1>
+        <h6 class="text-center mt-3 mb-4"><a href="/" class="text-body"><i class="fas fa-long-arrow-alt-left mr-2"></i>Back
+                                to shop</a></h6>
+                        {{/if}}
                     </div>
                 </div>
             </div>
 
-
             <div class="row">
-                <!-- single product -->
+				
+
+				<!-- single product -->
+				{{#each products}}
+				<div class="col-lg-3 col-md-6">
+				
+					<div class="single-product ">
+						
+						<div class="position-relative ">
+							
+							<a  href="/product-detail?id={{this._id}}">
+								{{#if this.offerPrice}}<div class="ml-2"><button class="btn btn-warning position-absolute pt-4  " ><div style="font-weight: 700;">{{this.discount}}% </div><br>Offer</button></div>{{/if}}
+								<img class="img-fluid" src="/product-pictures/{{this.image.[0]}}" alt="">
+						
+							</a>
+							
+						</div>
+						<div class="product-details">
+							<h3 style="color: #ff6f00;">{{this.name}}</h3>
+							<h6>{{this.description}}</h6>
+							<h5>size:{{this.size}}</h5>
+							<h5>color:{{this.color}}</h5>
+
+
+							
+
+							<p class="p-absoulute pr-1"><span></span> {{#if this.offerPrice}}
+								<del> ₹{{this.price}}</del>
+								₹{{this.offerPrice}}
+								{{!-- {{this.discount}}% off --}}
+								{{else}}
+								₹{{this.price}}
+								{{/if}}<span></span>
+
+
+
+
+							<div class="prd-bottom">
+
+								{{#if this.stock }}
+								<a class="social-info" href="/add-to-cart/{{this._id}}">
+									<span class="ti-bag"></span>
+									<p class="hover-text">Add To Cart</p>
+								</a>
+								{{else}}
+
+								<h6 style="color: #ff6f00;" class="hover-text">out of stock</h6>
+								</a>
+								{{/if}}
+								{{!-- <a href="/add-to-wishlist/{{this._id}}" class="social-info">
+									<span class="lnr lnr-heart"></span>
+									<p class="hover-text">Wishlist</p>
+								</a> --}}
+								<a href="/add-to-wishlist/{{this._id}}" class="social-info">
+									{{#if this.isWishlisted}}
+									<span class="fas fa-heart" style="font-size:14px; color:#ff6f00;"></span>
+									{{else}}
+									<span class="lnr lnr-heart"></span>
+									{{/if}}
+									<p class="hover-text">Wishlist</p>
+								</a>
+
+								{{!-- <a href="" class="social-info">
+									<span class="lnr lnr-move"></span>
+									<p class="hover-text">view more</p>
+								</a> --}}
+								<a href="" class="social-info">
+									<form action="/click" method="post">
+										<input type="text" name="id" value="{{this._id}}" hidden>
+										<span class="lnr lnr-move"></span>
+										<button type="submit" class="hover-text"
+											style="border: none; background:transparent ">View more</button>
+									</form>
+								</a>
+							</div>
+						</div>
+					</div>
+					
+				</div>
+				
+				{{/each}}
+				
+			</div>
+
+
+            {{!-- <div class="row">
+             
                 {{#each products}}
                 <div class="col-lg-3 col-md-6">
                     <div class="single-product">
-                        {{!-- <img class="img-fluid" src="/product-pictures/{{this._id}}.jpg" alt=""> --}}
+                        
                         <a href="/product-detail?id={{this._id}}"><img class="img-fluid"
                                 src="/product-pictures/{{this.image.[0]}}" alt=""></a>
                         <div class="product-details">
@@ -77,10 +167,7 @@
                                     <p class="hover-text">add to bag</p>
                                 </a>
 
-                                {{!-- <a class="social-info" onclick="return addToCart('{{this._id}}')">
-                                    <span class="ti-bag"></span>
-                                    <p class="hover-text">add to bag</p>
-                                </a> --}}
+                                
 
                                 <a href="/add-to-wishlist/{{this._id}}" class="social-info">
                                     {{#if this.isWishlisted}}<span class="fas fa-heart"
@@ -104,5 +191,5 @@
                     </div>
                 </div>
                 {{/each}}
-            </div>
+            </div> --}}
         </div>

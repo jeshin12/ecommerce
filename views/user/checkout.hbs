@@ -242,7 +242,7 @@
 
                         <input type="text" name="userId" id="" value="{{user._id}}" hidden>
 
-
+<input type="text" name="totalprice" id="totalAmounts" value={{total}} hidden>
 
 
                         <button class="primary-btn" type="submit" >Place Order</button>
@@ -418,6 +418,7 @@
                     'success'
                 ).then(()=>{
                      if (response.verify) {
+                         document.getElementById('totalAmounts').value = response.amount
                     document.getElementById('totalAmount').innerHTML = response.amount
                     document.getElementById("Details").hidden = false
                     document.getElementById('totalPrice').innerHTML = response.originalPrice
