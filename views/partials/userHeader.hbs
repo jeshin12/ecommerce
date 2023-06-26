@@ -69,7 +69,7 @@
 
 							{{#if user}}
 
-							<li class="nav-item">
+							{{!-- <li class="nav-item">
 								<a href="/cart" class="cart">
 									
 									<span id="cart-count" class="ti-bag">
@@ -78,6 +78,16 @@
 
 									
 
+								</a>
+							</li> --}}
+							<li class="nav-item">
+								<a href="/cart" class="cart">
+									<span id="cart-count" class="ti-bag">
+										<span class="d-sm">
+											<span class=" d-sm-inline" style="color: #ff6f00">{{cartCount}}</span>
+										</span>
+							
+									</span>
 								</a>
 							</li>
 							{{/if}}

@@ -32,7 +32,7 @@ router.get('/',sessionCheck,homePage)
 
 router.get('/login',nocache, loginPage);
 
-router.get('/signup', nocache,signupPage);
+router.get('/signup', nocache,signupPage); 
 
 router.post('/signupSubmit',nocache,signupSubmit);
 
