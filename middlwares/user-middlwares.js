@@ -31,15 +31,13 @@ module.exports = {
 
     verifyLogin(req, res, next) {
         if (req.session.loggedIn) {
-            console.log("log aanu");
+            
             next()
         } else {
-            console.log("logalla")
+           
             res.redirect('/login')
-            //   res.render('user/userLogin')
-            console.log("Ethunnundo");
-            // 
-            // res.send("fdhfsgfgsh")
+           
+            
         }
     },
 

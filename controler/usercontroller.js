@@ -52,54 +52,6 @@ module.exports = {
     //-------login page End-----
 
 
-    // homePage: async (req, res) => {
-    //     let user = req.session.users
-    //     let categories;
-    //     let cartCount=await getCartCount(user._id)
-    //     await productHelpers.getAllcategory().then((categoryList) => {
-
-    //         categories = categoryList;
-    //     })
-    //     productHelpers.getAllproduct().then((product) => {
-
-    //         console.log(product, "=======================");
-
-
-
-    //         let totalProducts = product.length
-    //         let limit = 4
-    //         let products = product.slice(0, limit)
-    //         let pages = []
-
-    //         for (let i = 1; i <= Math.ceil(totalProducts / limit); i++) {
-    //             pages.push(i)
-    //         }
-    //         if (req.session.users) {
-    //             getWishlistId(req.session.users._id).then((data) => {
-
-    //               for (let i = 0; i < products.length; i++) {
-    //                 for (let j = 0; j < data.length; j++) {
-
-    //                   if (products[i]._id.toString() == data[j].toString()) {
-    //                     products[i].isWishlisted = true;
-    //                     console.log(products[i], 'hai');
-    //                   }
-
-    //                 }
-
-    //               }
-
-
-
-    //         console.log(pages, "pppppppppprrrrrrrrroooooooooodddddddduuuuuuuuuuuucccccccccctttttt");
-    //         res.render('user/homepage', { user: true, logged: true, userData: user, product, products, categories, pages,cartCount})
-
-    //     })
-    // }
-
-    //     })
-    // },
-
     //--------------home Page------
     homePage: async (req, res) => {
         let user = req.session.users
@@ -395,6 +347,7 @@ module.exports = {
 
 
     otpSubmit: ((req, res) => {
+        console.log(signupData,'signupDataaaaaaaa');
         otpConfirm(req.body, signupData).then((response) => {
             console.log(response);
             if (response.status) {
@@ -445,11 +398,19 @@ module.exports = {
 
     }),
 
+    // addtocart: ((req, res) => {
+
+    //     AddtoCart(req.params.id, req.session.users._id).then(() => {
+
+    //         res.redirect('/')
+    //     })
+
+    // }),
     addtocart: ((req, res) => {
 
         AddtoCart(req.params.id, req.session.users._id).then(() => {
 
-            res.redirect('/')
+            res.redirect('/cart')
         })
 
     }),
