@@ -19,3 +19,5 @@ Instyle store is an e-commerce site built using Node.js, Express, and MongoDB wi
 - EC2.
 - MVC.
 - Chart js
+## Project Demo
+https://instyle.up.railway.app
